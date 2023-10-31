@@ -15,4 +15,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Big Mac"
 include(":app")
- 
+include(":core")
