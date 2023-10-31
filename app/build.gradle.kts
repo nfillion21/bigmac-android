@@ -80,6 +80,8 @@ dependencies {
 
     implementation(Dependencies.hiltAndroid)
     kapt(Dependencies.hiltAndroidCompiler)
+    implementation (Dependencies.hiltNavigationCompose)
+    implementation (Dependencies.navigationCompose)
 
     implementation(Dependencies.ktorAndroidClient)
     implementation(Dependencies.ktorSerializationJSON)

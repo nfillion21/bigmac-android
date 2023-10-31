@@ -23,6 +23,9 @@ object Dependencies {
     val hiltAndroid by lazy { "com.google.dagger:hilt-android:${Versions.hilt}" }
     val hiltAndroidCompiler by lazy { "com.google.dagger:hilt-android-compiler:${Versions.hilt}" }
 
+    val hiltNavigationCompose by lazy {"androidx.hilt:hilt-navigation-compose:${Versions.hiltNavigationComposeVersion}"}
+    val navigationCompose by lazy {"androidx.navigation:navigation-compose:${Versions.navigationComposeVersion}"}
+
     // Ktor
     val ktorAndroidClient by lazy { "io.ktor:ktor-client-android:${Versions.ktor}" }
     val ktorSerializationJSON by lazy { "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}" }

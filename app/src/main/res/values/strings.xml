@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Big Mac</string>
+    <string name="app_tagline">Big Mac with Jetpack Compose</string>
+    <string name="start_big_mac">Start journey from Lamorlaye!</string>
 </resources>
