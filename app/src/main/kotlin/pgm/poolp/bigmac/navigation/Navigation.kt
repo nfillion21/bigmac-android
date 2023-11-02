@@ -5,6 +5,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import pgm.poolp.bigmac.bigmac.BigMacRoute
 import pgm.poolp.bigmac.navigation.Destinations.BIG_MAC_ROUTE
 import pgm.poolp.bigmac.navigation.Destinations.WELCOME_ROUTE
 import pgm.poolp.bigmac.welcome.WelcomeRoute
@@ -31,11 +32,9 @@ fun BigMacNavHost(
         }
 
         composable(BIG_MAC_ROUTE) {
-            /*
-            SurveyRoute(
+            BigMacRoute(
                 onNavUp = navController::navigateUp,
             )
-            */
         }
     }
 }

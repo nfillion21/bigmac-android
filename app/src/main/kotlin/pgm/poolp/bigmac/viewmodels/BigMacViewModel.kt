@@ -8,7 +8,7 @@ import javax.inject.Inject
 @HiltViewModel
 class BigMacViewModel @Inject internal constructor() : ViewModel() {
 
-    private var page = 0
+    private var step = 0
 
     private val _bigMacScreenData = mutableStateOf(createBigMacScreenData())
     val bigMacScreenData: BigMacScreenData
@@ -18,34 +18,34 @@ class BigMacViewModel @Inject internal constructor() : ViewModel() {
      * Returns true if the ViewModel handled the back press (i.e., it went back one question)
      */
     fun onBackPressed(): Boolean {
-        if (page == 0) {
+        if (step == 0) {
             return false
         }
-        changePage(page - 1)
+        changePage(step - 1)
         return true
     }
 
     fun onPreviousPressed() {
-        if (page == 0) {
+        if (step == 0) {
             throw IllegalStateException("onPreviousPressed when on question 0")
         }
-        changePage(page - 1)
+        changePage(step - 1)
     }
 
     private fun changePage(newPage: Int) {
-        page = newPage
+        step = newPage
         _bigMacScreenData.value = createBigMacScreenData()
     }
 
     private fun createBigMacScreenData(): BigMacScreenData {
         return BigMacScreenData(
-            page = page,
-            shouldShowPreviousButton = page > 0
+            step = step,
+            shouldShowPreviousButton = step > 0
         )
     }
 }
 
 data class BigMacScreenData(
-    val page: Int,
+    val step: Int,
     val shouldShowPreviousButton: Boolean
 )

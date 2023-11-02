@@ -7,14 +7,16 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import pgm.poolp.bigmac.R
 import pgm.poolp.bigmac.viewmodels.BigMacViewModel
-import pgm.poolp.blocages.viewmodels.SurveyQuestion
 
 private const val CONTENT_ANIMATION_DURATION = 300
 
@@ -23,11 +25,10 @@ private const val CONTENT_ANIMATION_DURATION = 300
  */
 @Composable
 fun BigMacRoute(
-    onSurveyComplete: (dice:Int) -> Unit,
     onNavUp: () -> Unit,
 ) {
     val viewModel: BigMacViewModel = hiltViewModel()
-    val surveyScreenData = viewModel.bigMacScreenData
+    val bigMacScreenData = viewModel.bigMacScreenData
 
     BackHandler {
         if (!viewModel.onBackPressed()) {
@@ -36,26 +37,23 @@ fun BigMacRoute(
     }
 
     BigMacScreen(
-        surveyScreenData = surveyScreenData,
-        isNextEnabled = viewModel.isNextEnabled,
+        bigMacScreenData = bigMacScreenData,
         onClosePressed = {
             onNavUp()
         },
         onPreviousPressed = { viewModel.onPreviousPressed() },
-        onNextPressed = { viewModel.onNextPressed() },
-        onDonePressed = { viewModel.onDonePressed(onSurveyComplete) }
     ) { paddingValues ->
 
         val modifier = Modifier.padding(paddingValues)
 
         AnimatedContent(
-            targetState = surveyScreenData,
+            targetState = bigMacScreenData,
             transitionSpec = {
                 val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
 
                 val direction = getTransitionDirection(
-                    initialIndex = initialState.page,
-                    targetIndex = targetState.page,
+                    initialIndex = initialState.step,
+                    targetIndex = targetState.step,
                 )
 
                 slideIntoContainer(
@@ -66,9 +64,16 @@ fun BigMacRoute(
                     animationSpec = animationSpec
                 )
             },
-            label = "surveyScreenDataAnimation"
+            label = "bigMacScreenDataAnimation"
         ) { targetState ->
-
+            when (targetState.step) {
+                0 -> Text(
+                    text = stringResource(R.string.mcdonalds_in, "Lamorlaye"),
+                    style = MaterialTheme.typography.labelLarge,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
+            }
+            /*
             when (targetState.surveyQuestion) {
                 SurveyQuestion.NUMBER_OF_DICE -> NumberOfDiceQuestion(
                     selectedAnswer = viewModel.numberOfDiceResponse,
@@ -83,6 +88,7 @@ fun BigMacRoute(
                     modifier = modifier,
                 )
             }
+            */
         }
     }
 }
