@@ -5,4 +5,7 @@
     <string name="mcdonalds_in">MacDonald\'s in: \n%1$s</string>
     <string name="cd_navigate_up">Navigate up</string>
     <string name="close">Close</string>
+    <string name="home_post_min_read">%1$s - %2$d min read</string>
+    <string name="home_top_section_title">Top stories for you</string>
+    <string name="home_post_based_on_history">BASED ON YOUR HISTORY</string>
 </resources>

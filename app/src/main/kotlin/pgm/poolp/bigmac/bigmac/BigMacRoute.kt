@@ -67,11 +67,8 @@ fun BigMacRoute(
             label = "bigMacScreenDataAnimation"
         ) { targetState ->
             when (targetState.step) {
-                0 -> Text(
-                    text = stringResource(R.string.mcdonalds_in, "Lamorlaye"),
-                    style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(start = 8.dp)
-                )
+                //1 -> PostList(postsFeed = posts, onArticleTapped = {})
+                //else -> PostList(postsFeed = posts, onArticleTapped = {})
             }
             /*
             when (targetState.surveyQuestion) {
