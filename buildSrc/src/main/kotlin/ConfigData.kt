@@ -1,5 +1,5 @@
 object ConfigData {
-    const val applicationId = "pgm.poolp.bigmac"
+    const val applicationId = "xyz.poolp.bigmac"
     const val compileSdkVersion = 34
     const val minSdkVersion = 31
     const val targetSdkVersion = 34
