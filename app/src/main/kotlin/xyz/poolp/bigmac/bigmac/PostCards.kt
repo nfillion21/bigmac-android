@@ -25,9 +25,8 @@ fun AuthorAndReadTime(
     Row(modifier) {
         Text(
             text = stringResource(
-                id = R.string.home_post_min_read,
+                id = R.string.distance_km,
                 formatArgs = arrayOf(
-                    post.metadata.author.name,
                     post.metadata.readTimeMinutes
                 )
             ),
@@ -73,7 +72,7 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
                 .padding(vertical = 12.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.home_post_based_on_history),
+                text = stringResource(id = R.string.based_in_paris),
                 style = MaterialTheme.typography.labelMedium
             )
             PostTitle(post = post)

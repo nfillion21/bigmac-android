@@ -45,15 +45,14 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
             modifier = Modifier.padding(bottom = 8.dp)
         )
         Text(
-            text = post.metadata.author.name,
+            text = "McDonald\'s #5",
             style = typography.labelLarge,
             modifier = Modifier.padding(bottom = 4.dp)
         )
         Text(
             text = stringResource(
-                id = R.string.home_post_min_read,
+                id = R.string.distance_from_lamorlaye_km,
                 formatArgs = arrayOf(
-                    post.metadata.date,
                     post.metadata.readTimeMinutes
                 )
             ),

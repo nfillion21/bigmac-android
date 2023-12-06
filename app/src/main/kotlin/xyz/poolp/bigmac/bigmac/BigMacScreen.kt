@@ -145,7 +145,7 @@ fun PostList(
 private fun PostListTopSection(post: Post, navigateToArticle: (String) -> Unit) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
-        text = stringResource(id = R.string.home_top_section_title),
+        text = stringResource(id = R.string.current_mcdo_title),
         style = MaterialTheme.typography.titleMedium
     )
     PostCardTop(
