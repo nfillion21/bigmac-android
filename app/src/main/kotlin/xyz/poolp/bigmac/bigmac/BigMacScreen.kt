@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -39,20 +40,25 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.supportWideScreen
 import xyz.poolp.bigmac.viewmodels.BigMacScreenData
+import xyz.poolp.bigmac.viewmodels.BigMacViewModel
 
 private const val CONTENT_ANIMATION_DURATION = 300
 @OptIn(ExperimentalMaterial3Api::class)
 // Scaffold is experimental in m3
 @Composable
 fun BigMacScreen(
+    bigMacViewModel: BigMacViewModel,
     bigMacScreenData: BigMacScreenData,
     onClosePressed: () -> Unit,
     onPreviousPressed: () -> Unit,
     onMcDoPressed: (String) -> Unit,
 ) {
+    val scope = rememberCoroutineScope()
+
     Surface(modifier = Modifier.supportWideScreen()) {
         val topAppBarState = rememberTopAppBarState()
         val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(topAppBarState)
@@ -94,7 +100,11 @@ fun BigMacScreen(
                     1 -> {
                         PostList(
                             postsFeed = posts,
-                            onArticleTapped = onMcDoPressed,
+                            onArticleTapped = {
+                                scope.launch {
+                                    bigMacViewModel.onBigMacPressed()
+                                }
+                            },
                             modifier = Modifier
                                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                                 .padding(innerPadding)

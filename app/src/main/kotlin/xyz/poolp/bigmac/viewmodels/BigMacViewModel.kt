@@ -2,11 +2,20 @@ package xyz.poolp.bigmac.viewmodels
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancelAndJoin
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pgm.poolp.core.usecase.PostMcDonaldsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class BigMacViewModel @Inject internal constructor() : ViewModel() {
+class BigMacViewModel @Inject internal constructor(
+    private val postMcDonaldsUseCase: PostMcDonaldsUseCase
+) : ViewModel() {
 
     private var step = 0
 
@@ -34,6 +43,13 @@ class BigMacViewModel @Inject internal constructor() : ViewModel() {
 
     fun onMcDoPressed() {
         changePage(step + 1)
+    }
+
+    suspend fun onBigMacPressed() {
+        viewModelScope.launch {
+            val k = postMcDonaldsUseCase.invoke()
+            val k2 = "hello world"
+        }
     }
 
     private fun changePage(newPage: Int) {

@@ -22,6 +22,7 @@ fun BigMacRoute(
     }
 
     BigMacScreen(
+        bigMacViewModel = viewModel,
         bigMacScreenData = bigMacScreenData,
         onClosePressed = { onNavUp() },
         onMcDoPressed = { viewModel.onMcDoPressed() },

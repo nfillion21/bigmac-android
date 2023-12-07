@@ -17,8 +17,8 @@ object Versions {
     const val debugComposeUiTooling = "ui-tooling"
     const val debugComposeUiTestManifest = "ui-test-manifest"
 
-    const val hilt = "2.44"
-    const val ktor = "2.3.3"
+    const val hilt = "2.49"
+    const val ktor = "2.3.6"
 
     const val hiltNavigationComposeVersion = "1.0.0"
     const val navigationComposeVersion = "2.7.0"
