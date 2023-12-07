@@ -2,11 +2,11 @@
     <string name="app_name">Big Mac</string>
     <string name="app_tagline">Big Mac with Jetpack Compose</string>
     <string name="start_big_mac">Start journey from Lamorlaye!</string>
-    <string name="mcdonalds_in">McDonald\'s in: \n%1$s</string>
+    <string name="mcdonalds_in">McDonald\'s #5 in: \n%1$s</string>
     <string name="cd_navigate_up">Navigate up</string>
     <string name="close">Close</string>
     <string name="distance_km">%1$s km from McDonald\'s #5</string>
     <string name="distance_from_lamorlaye_km">Located %1$s km from Lamorlaye</string>
-    <string name="current_mcdo_title">Current McDonald\'s</string>
+    <string name="mcdo_around_you_title">List of nearby McDonald\'s</string>
     <string name="based_in_paris">BASED IN LAMORLAYE</string>
 </resources>

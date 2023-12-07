@@ -62,7 +62,8 @@ fun BigMacScreen(
                     title = "Lamorlaye",
                     scrollBehavior = scrollBehavior,
                     onClosePressed = onClosePressed,
-                    onBackPressed = onPreviousPressed
+                    onBackPressed = onPreviousPressed,
+                    shouldShowPreviousButton = bigMacScreenData.shouldShowPreviousButton
                 )
             },
         )
@@ -95,9 +96,7 @@ fun BigMacScreen(
                     else -> {
                         PostList(
                             postsFeed = posts,
-                            onArticleTapped =
-                                onMcDoPressed
-                            ,
+                            onArticleTapped = onMcDoPressed,
                             modifier = Modifier
                                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                                 .padding(innerPadding)
@@ -129,6 +128,7 @@ private fun getTransitionDirection(
 @Composable
 private fun BigMacAppBar(
     title: String,
+    shouldShowPreviousButton: Boolean,
     scrollBehavior: TopAppBarScrollBehavior?,
     onClosePressed: () -> Unit,
     onBackPressed: () -> Unit,
@@ -152,12 +152,14 @@ private fun BigMacAppBar(
             }
         },
         navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    imageVector = Icons.Filled.ArrowBack,
-                    contentDescription = stringResource(R.string.cd_navigate_up),
-                    tint = MaterialTheme.colorScheme.primary
-                )
+            if (shouldShowPreviousButton) {
+                IconButton(onClick = onBackPressed) {
+                    Icon(
+                        imageVector = Icons.Filled.ArrowBack,
+                        contentDescription = stringResource(R.string.cd_navigate_up),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                }
             }
         },
         actions = {
@@ -203,7 +205,7 @@ fun PostList(
 private fun PostListTopSection(post: Post, navigateToArticle: (String) -> Unit) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
-        text = stringResource(id = R.string.current_mcdo_title),
+        text = stringResource(id = R.string.mcdo_around_you_title),
         style = MaterialTheme.typography.titleMedium
     )
     PostCardTop(
@@ -212,7 +214,6 @@ private fun PostListTopSection(post: Post, navigateToArticle: (String) -> Unit) 
     )
     PostListDivider()
 }
-
 
 /**
  * Full-width list items that display "based on your history" for [PostList]
