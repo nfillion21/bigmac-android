@@ -1,5 +1,10 @@
 package xyz.poolp.bigmac.bigmac
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.TweenSpec
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -32,11 +37,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.supportWideScreen
 import xyz.poolp.bigmac.viewmodels.BigMacScreenData
 
+private const val CONTENT_ANIMATION_DURATION = 300
 @OptIn(ExperimentalMaterial3Api::class)
 // Scaffold is experimental in m3
 @Composable
@@ -44,7 +51,7 @@ fun BigMacScreen(
     bigMacScreenData: BigMacScreenData,
     onClosePressed: () -> Unit,
     onPreviousPressed: () -> Unit,
-    content: @Composable (PaddingValues) -> Unit,
+    onMcDoPressed: (String) -> Unit,
 ) {
     Surface(modifier = Modifier.supportWideScreen()) {
         val topAppBarState = rememberTopAppBarState()
@@ -55,18 +62,67 @@ fun BigMacScreen(
                     title = "Lamorlaye",
                     scrollBehavior = scrollBehavior,
                     onClosePressed = onClosePressed,
-                    onBackPressed = onClosePressed
+                    onBackPressed = onPreviousPressed
                 )
+            },
+        )
+        { innerPadding ->
+            AnimatedContent(
+                targetState = bigMacScreenData,
+                transitionSpec = {
+                    val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
+
+                    val direction = getTransitionDirection(
+                        initialIndex = initialState.step,
+                        targetIndex = targetState.step,
+                    )
+
+                    slideIntoContainer(
+                        towards = direction,
+                        animationSpec = animationSpec,
+                    ) togetherWith slideOutOfContainer(
+                        towards = direction,
+                        animationSpec = animationSpec
+                    )
+                },
+                label = "bigMacScreenDataAnimation"
+            ) { targetState ->
+
+                when (targetState.step) {
+                    1 -> PostList(postsFeed = posts, onArticleTapped =
+                        onMcDoPressed
+                    )
+                    else -> {
+                        PostList(
+                            postsFeed = posts,
+                            onArticleTapped =
+                                onMcDoPressed
+                            ,
+                            modifier = Modifier
+                                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                                .padding(innerPadding)
+                        )
+                    }
+                }
             }
-        ) { innerPadding ->
-            PostList(
-                postsFeed = posts,
-                onArticleTapped = {},
-                modifier = Modifier
-                    .nestedScroll(scrollBehavior.nestedScrollConnection)
-                    .padding(innerPadding)
-            )
         }
+    }
+}
+
+private fun getTransitionDirection(
+    initialIndex: Int,
+    targetIndex: Int
+): AnimatedContentTransitionScope.SlideDirection {
+    return if (targetIndex > initialIndex) {
+        // Going forwards in the survey: Set the initial offset to start
+        // at the size of the content so it slides in from right to left, and
+        // slides out from the left of the screen to -fullWidth
+        AnimatedContentTransitionScope.SlideDirection.Left
+    } else {
+        // Going back to the previous question in the set, we do the same
+        // transition as above, but with different offsets - the inverse of
+        // above, negative fullWidth to enter, and fullWidth to exit.
+        AnimatedContentTransitionScope.SlideDirection.Right
     }
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -134,7 +190,9 @@ fun PostList(
         contentPadding = contentPadding,
         state = state
     ) {
-        item { PostListTopSection(postsFeed.highlightedPost, onArticleTapped) }
+        item { PostListTopSection(postsFeed.highlightedPost,
+            onArticleTapped
+        ) }
         if (postsFeed.recentPosts.isNotEmpty()) {
             item { PostListHistorySection(postsFeed.recentPosts, onArticleTapped) }
         }

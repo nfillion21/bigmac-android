@@ -32,6 +32,10 @@ class BigMacViewModel @Inject internal constructor() : ViewModel() {
         changePage(step - 1)
     }
 
+    fun onMcDoPressed() {
+        changePage(step + 1)
+    }
+
     private fun changePage(newPage: Int) {
         step = newPage
         _bigMacScreenData.value = createBigMacScreenData()
