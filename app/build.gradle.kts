@@ -69,7 +69,7 @@ dependencies {
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterial)
-    implementation(project(mapOf("path" to ":core")))
+    implementation(project(":core"))
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidTestJUnit)
     androidTestImplementation(Dependencies.androidTestEspresso)

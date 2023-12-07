@@ -1,5 +1,6 @@
 package xyz.poolp.bigmac.screens
 
+import android.location.Location
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
