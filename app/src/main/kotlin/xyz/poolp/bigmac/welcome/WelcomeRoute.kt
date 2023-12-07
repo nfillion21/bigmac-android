@@ -8,7 +8,7 @@ fun WelcomeRoute(
     startRoad: () -> Unit,
 ) {
     WelcomeScreen(
-        onSignInAsGuest = {
+        onStartRoad = {
             startRoad()
         },
     )

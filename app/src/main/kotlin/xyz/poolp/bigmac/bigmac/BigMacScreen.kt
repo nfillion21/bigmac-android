@@ -59,6 +59,7 @@ fun BigMacScreen(
         Scaffold(
             topBar = {
                 BigMacAppBar(
+                    step = bigMacScreenData.step,
                     title = "Lamorlaye",
                     scrollBehavior = scrollBehavior,
                     onClosePressed = onClosePressed,
@@ -90,9 +91,16 @@ fun BigMacScreen(
             ) { targetState ->
 
                 when (targetState.step) {
-                    1 -> PostList(postsFeed = posts, onArticleTapped =
-                        onMcDoPressed
-                    )
+                    1 -> {
+                        PostList(
+                            postsFeed = posts,
+                            onArticleTapped = onMcDoPressed,
+                            modifier = Modifier
+                                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                                .padding(innerPadding)
+                        )
+                    }
+
                     else -> {
                         PostList(
                             postsFeed = posts,
@@ -113,12 +121,12 @@ private fun getTransitionDirection(
     targetIndex: Int
 ): AnimatedContentTransitionScope.SlideDirection {
     return if (targetIndex > initialIndex) {
-        // Going forwards in the survey: Set the initial offset to start
+        // Going forwards in the road: Set the initial offset to start
         // at the size of the content so it slides in from right to left, and
         // slides out from the left of the screen to -fullWidth
         AnimatedContentTransitionScope.SlideDirection.Left
     } else {
-        // Going back to the previous question in the set, we do the same
+        // Going back to the previous mcdo in the set, we do the same
         // transition as above, but with different offsets - the inverse of
         // above, negative fullWidth to enter, and fullWidth to exit.
         AnimatedContentTransitionScope.SlideDirection.Right
@@ -127,6 +135,7 @@ private fun getTransitionDirection(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BigMacAppBar(
+    step: Int,
     title: String,
     shouldShowPreviousButton: Boolean,
     scrollBehavior: TopAppBarScrollBehavior?,
@@ -145,7 +154,7 @@ private fun BigMacAppBar(
                         .size(36.dp)
                 )
                 Text(
-                    text = stringResource(R.string.mcdonalds_in, title),
+                    text = stringResource(R.string.mcdonalds_in, step+1, title),
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(start = 8.dp)
                 )

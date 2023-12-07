@@ -1,7 +1,6 @@
 package xyz.poolp.bigmac.bigmac
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import xyz.poolp.bigmac.viewmodels.BigMacViewModel
@@ -24,12 +23,8 @@ fun BigMacRoute(
 
     BigMacScreen(
         bigMacScreenData = bigMacScreenData,
-        onClosePressed = {
-            onNavUp()
-        },
-        onMcDoPressed = {
-            viewModel.onMcDoPressed()
-        },
+        onClosePressed = { onNavUp() },
+        onMcDoPressed = { viewModel.onMcDoPressed() },
         onPreviousPressed = { viewModel.onPreviousPressed() },
     )
 }

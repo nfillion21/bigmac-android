@@ -28,7 +28,7 @@ import xyz.poolp.bigmac.util.supportWideScreen
 
 @Composable
 fun WelcomeScreen(
-    onSignInAsGuest: () -> Unit,
+    onStartRoad: () -> Unit,
 ) {
     Surface(modifier = Modifier.supportWideScreen()) {
         Column(
@@ -39,7 +39,7 @@ fun WelcomeScreen(
         ) {
             Branding()
             StartBigMac(
-                onSignInAsGuest = onSignInAsGuest,
+                onStartRoad = onStartRoad,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
@@ -89,12 +89,12 @@ private fun Logo(
 
 @Composable
 private fun StartBigMac(
-    onSignInAsGuest: () -> Unit,
+    onStartRoad: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         FilledTonalButton(
-            onClick = onSignInAsGuest,
+            onClick = onStartRoad,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 20.dp, bottom = 24.dp),
