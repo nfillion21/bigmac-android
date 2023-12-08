@@ -45,8 +45,10 @@ import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.supportWideScreen
 import xyz.poolp.bigmac.viewmodels.BigMacScreenData
 import xyz.poolp.bigmac.viewmodels.BigMacViewModel
+import xyz.poolp.core.domain.McDonalds
 
 private const val CONTENT_ANIMATION_DURATION = 300
+
 @OptIn(ExperimentalMaterial3Api::class)
 // Scaffold is experimental in m3
 @Composable
@@ -98,9 +100,26 @@ fun BigMacScreen(
 
                 when (targetState.step) {
                     1 -> {
-                        PostList(
-                            postsFeed = posts,
-                            onArticleTapped = {
+                        McDonaldsList(
+                            mcdonalds = listOf(
+                                McDonalds(
+                                    identifier = "1",
+                                    formattedAddress = "formattedAddress",
+                                    shortFormattedAddress = "shortFormattedAddress",
+                                    latitude = 3.44,
+                                    longitude = 4.33,
+                                    locality = "Paris"
+                                ),
+                                McDonalds(
+                                    identifier = "2",
+                                    formattedAddress = "formattedAddress",
+                                    shortFormattedAddress = "shortFormattedAddress",
+                                    latitude = 3.44,
+                                    longitude = 4.33,
+                                    locality = "Paris"
+                                ),
+                            ),
+                            onMcDonaldsPressed = {
                                 scope.launch {
                                     bigMacViewModel.onBigMacPressed()
                                 }
@@ -112,9 +131,26 @@ fun BigMacScreen(
                     }
 
                     else -> {
-                        PostList(
-                            postsFeed = posts,
-                            onArticleTapped = onMcDoPressed,
+                        McDonaldsList(
+                            mcdonalds = listOf(
+                                McDonalds(
+                                    identifier = "1",
+                                    formattedAddress = "formattedAddress",
+                                    shortFormattedAddress = "shortFormattedAddress",
+                                    latitude = 3.44,
+                                    longitude = 4.33,
+                                    locality = "Paris"
+                                ),
+                                McDonalds(
+                                    identifier = "2",
+                                    formattedAddress = "formattedAddress",
+                                    shortFormattedAddress = "shortFormattedAddress",
+                                    latitude = 3.44,
+                                    longitude = 4.33,
+                                    locality = "Paris"
+                                ),
+                            ),
+                            onMcDonaldsPressed = onMcDoPressed,
                             modifier = Modifier
                                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                                 .padding(innerPadding)
@@ -142,6 +178,7 @@ private fun getTransitionDirection(
         AnimatedContentTransitionScope.SlideDirection.Right
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun BigMacAppBar(
@@ -164,7 +201,7 @@ private fun BigMacAppBar(
                         .size(36.dp)
                 )
                 Text(
-                    text = stringResource(R.string.mcdonalds_in, step+1, title),
+                    text = stringResource(R.string.mcdonalds_in, step + 1, title),
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -199,9 +236,9 @@ private fun BigMacAppBar(
 }
 
 @Composable
-fun PostList(
-    postsFeed: PostsFeed,
-    onArticleTapped: (postId: String) -> Unit,
+fun McDonaldsList(
+    mcdonalds: List<McDonalds>,
+    onMcDonaldsPressed: (postId: String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     state: LazyListState = rememberLazyListState(),
@@ -211,50 +248,51 @@ fun PostList(
         contentPadding = contentPadding,
         state = state
     ) {
-        item { PostListTopSection(postsFeed.highlightedPost,
-            onArticleTapped
-        ) }
-        if (postsFeed.recentPosts.isNotEmpty()) {
-            item { PostListHistorySection(postsFeed.recentPosts, onArticleTapped) }
+        item {
+            McDonaldsListTopSection(
+                mcdonalds.first(),
+                onMcDonaldsPressed
+            )
         }
+        item { McDonaldsListHistorySection(mcdonalds.drop(1), onMcDonaldsPressed) }
     }
 }
 
 @Composable
-private fun PostListTopSection(post: Post, navigateToArticle: (String) -> Unit) {
+private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (String) -> Unit) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
         text = stringResource(id = R.string.mcdo_around_you_title),
         style = MaterialTheme.typography.titleMedium
     )
-    PostCardTop(
-        post = post,
-        modifier = Modifier.clickable(onClick = { navigateToArticle(post.id) })
+    McDonaldsCardTop(
+        mcdonalds = mcdonalds,
+        modifier = Modifier.clickable(onClick = { roadToMcDonalds(mcdonalds.identifier) })
     )
     PostListDivider()
 }
 
 /**
- * Full-width list items that display "based on your history" for [PostList]
+ * Full-width list items that display "based on your history" for [McDonaldsList]
  *
- * @param posts (state) to display
- * @param navigateToArticle (event) request navigation to Article screen
+ * @param mcdonalds (state) to display
+ * @param roadToMcDonalds (event) request navigation to Article screen
  */
 @Composable
-private fun PostListHistorySection(
-    posts: List<Post>,
-    navigateToArticle: (String) -> Unit
+private fun McDonaldsListHistorySection(
+    mcdonalds: List<McDonalds>,
+    roadToMcDonalds: (String) -> Unit
 ) {
     Column {
-        posts.forEach { post ->
-            PostCardHistory(post, navigateToArticle)
+        mcdonalds.forEach { mcdo ->
+            McDonaldsCardNearby(mcdo, roadToMcDonalds)
             PostListDivider()
         }
     }
 }
 
 /**
- * Full-width divider with padding for [PostList]
+ * Full-width divider with padding for [McDonaldsList]
  */
 @Composable
 private fun PostListDivider() {

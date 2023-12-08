@@ -19,8 +19,35 @@ class BigMacViewModel @Inject internal constructor(
     val bigMacScreenData: BigMacScreenData
         get() = _bigMacScreenData.value
 
+    /*
+    init {
+        observeAssets()
+    }
+
+    private fun observeAssets() {
+        viewModelScope.launch {
+            assetsUseCase.invoke()
+                .catch { ex ->
+                    _uiState.value = MoaiHomeUIState(
+                        ethError = ex.message,
+                        tzError = ex.message
+                    )
+                }
+                .collect { assetList ->
+                    _uiState.update {
+                        it.copy(
+                            assets = assetList,
+                            step = 1
+                        )
+                    }
+                    launchAllAssets(fromPullToRefresh = false)
+                }
+        }
+    }
+    */
+
     /**
-     * Returns true if the ViewModel handled the back press (i.e., it went back one question)
+     * Returns true if the ViewModel handled the back press (i.e., it went back one page)
      */
     fun onBackPressed(): Boolean {
         if (step == 0) {

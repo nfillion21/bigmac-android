@@ -16,10 +16,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import xyz.poolp.bigmac.R
+import xyz.poolp.core.domain.McDonalds
 
 @Composable
-fun AuthorAndReadTime(
-    post: Post,
+fun McDonaldsDistance(
+    mcdonalds: McDonalds,
     modifier: Modifier = Modifier
 ) {
     Row(modifier) {
@@ -27,7 +28,7 @@ fun AuthorAndReadTime(
             text = stringResource(
                 id = R.string.distance_km,
                 formatArgs = arrayOf(
-                    post.metadata.readTimeMinutes
+                    1
                 )
             ),
             style = MaterialTheme.typography.bodyMedium
@@ -36,9 +37,9 @@ fun AuthorAndReadTime(
 }
 
 @Composable
-fun PostImage(post: Post, modifier: Modifier = Modifier) {
+fun McDonaldsImage(mcdonalds: McDonalds, modifier: Modifier = Modifier) {
     Image(
-        painter = painterResource(post.imageThumbId),
+        painter = painterResource(R.drawable.mcdonalds_logo),
         contentDescription = null, // decorative
         modifier = modifier
             .size(40.dp, 40.dp)
@@ -47,9 +48,9 @@ fun PostImage(post: Post, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun PostTitle(post: Post) {
+fun McDonaldsTitle(mcdonalds: McDonalds) {
     Text(
-        text = post.title,
+        text = mcdonalds.shortFormattedAddress,
         style = MaterialTheme.typography.titleMedium,
         maxLines = 3,
         overflow = TextOverflow.Ellipsis,
@@ -57,13 +58,13 @@ fun PostTitle(post: Post) {
 }
 
 @Composable
-fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
+fun McDonaldsCardNearby(mcdonalds: McDonalds, roadToMcDonalds: (String) -> Unit) {
     Row(
         Modifier
-            .clickable(onClick = { navigateToArticle(post.id) })
+            .clickable(onClick = { roadToMcDonalds(mcdonalds.identifier) })
     ) {
-        PostImage(
-            post = post,
+        McDonaldsImage(
+            mcdonalds = mcdonalds,
             modifier = Modifier.padding(16.dp)
         )
         Column(
@@ -72,12 +73,12 @@ fun PostCardHistory(post: Post, navigateToArticle: (String) -> Unit) {
                 .padding(vertical = 12.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.based_in_paris),
+                text = stringResource(id = R.string.based_in_locality, mcdonalds.locality.uppercase()),
                 style = MaterialTheme.typography.labelMedium
             )
-            PostTitle(post = post)
-            AuthorAndReadTime(
-                post = post,
+            McDonaldsTitle(mcdonalds = mcdonalds)
+            McDonaldsDistance(
+                mcdonalds = mcdonalds,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

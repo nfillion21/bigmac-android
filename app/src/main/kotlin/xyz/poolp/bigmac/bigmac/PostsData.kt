@@ -71,14 +71,5 @@ val post5 = Post(
 val posts: PostsFeed =
     PostsFeed(
         highlightedPost = post4,
-        recentPosts = listOf(post1, post2, post3, post4, post5),
-        popularPosts = listOf(
-            post5,
-            post1.copy(id = "post6"),
-        ),
-        recommendedPosts = listOf(
-            post3.copy(id = "post8"),
-            post4.copy(id = "post9"),
-            post5.copy(id = "post10")
-        )
+        recentPosts = listOf(post1, post2, post3, post4, post5)
     )

@@ -17,9 +17,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import xyz.poolp.bigmac.R
+import xyz.poolp.core.domain.McDonalds
 
 @Composable
-fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
+fun McDonaldsCardTop(mcdonalds: McDonalds, modifier: Modifier = Modifier) {
     // TUTORIAL CONTENT STARTS HERE
     val typography = MaterialTheme.typography
     Column(
@@ -32,7 +33,7 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .clip(shape = MaterialTheme.shapes.medium)
         Image(
-            painter = painterResource(post.imageId),
+            painter = painterResource(R.drawable.current_mcdonalds),
             contentDescription = null, // decorative
             modifier = imageModifier,
             contentScale = ContentScale.Crop
@@ -40,7 +41,7 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
         Spacer(Modifier.height(16.dp))
 
         Text(
-            text = post.title,
+            text = mcdonalds.formattedAddress,
             style = typography.titleLarge,
             modifier = Modifier.padding(bottom = 8.dp)
         )
@@ -53,7 +54,7 @@ fun PostCardTop(post: Post, modifier: Modifier = Modifier) {
             text = stringResource(
                 id = R.string.distance_from_lamorlaye_km,
                 formatArgs = arrayOf(
-                    post.metadata.readTimeMinutes
+                    1
                 )
             ),
             style = typography.bodySmall
