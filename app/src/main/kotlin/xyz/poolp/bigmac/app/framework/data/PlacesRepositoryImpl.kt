@@ -1,18 +1,17 @@
 package xyz.poolp.bigmac.app.framework.data
 
-import android.location.Location
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import pgm.poolp.core.data.PlacesRepository
-import pgm.poolp.core.domain.McDonalds
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBody
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyCircle
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsRemote
+import xyz.poolp.core.data.PlacesRepository
+import xyz.poolp.core.domain.McDonalds
 import javax.inject.Inject
 
 class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpClient) :
@@ -20,7 +19,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
     override suspend fun postMcDonalds(): List<McDonalds> {
 
         val mcDonaldsRemote: McDonaldsRemote =
-            ktorHttpClient.post("https://places.googleap.com/v1/places:searchtext") {
+            ktorHttpClient.post("https://places.googleapis.com/v1/places:searchText") {
                 setBody(
                     McDonaldsPostBody(
                         textQuery = "McDonald's",
@@ -45,14 +44,29 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                 }
             }.body()
 
-        return listOf(
-            McDonalds(
-                identifier = "",
-                address = "",
-                location = Location(""),
-                city = ""
-            )
-        )
+        return mcDonaldsRemote.places.map { mcDonalds ->
+            with(mcDonalds) {
+
+                var city = ""
+                loop@ for (component in addressComponents) {
+                    for (type in component.types) {
+                        if (type == "locality") {
+                            city = component.longText
+                            break@loop
+                        }
+                    }
+                }
+
+                McDonalds(
+                    identifier = id,
+                    formattedAddress = formattedAddress,
+                    shortFormattedAddress = shortFormattedAddress,
+                    latitude = location.latitude,
+                    longitude = location.longitude,
+                    locality = city
+                )
+            }
+        }
 
         /*
         val mcDonaldsRemote: McDonaldsRemote =

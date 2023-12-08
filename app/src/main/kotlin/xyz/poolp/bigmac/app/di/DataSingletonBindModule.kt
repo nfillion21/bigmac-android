@@ -4,8 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import pgm.poolp.core.data.PlacesRepository
 import xyz.poolp.bigmac.app.framework.data.PlacesRepositoryImpl
+import xyz.poolp.core.data.PlacesRepository
 import javax.inject.Singleton
 
 @Module

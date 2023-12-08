@@ -1,6 +1,6 @@
-package pgm.poolp.core.data
+package xyz.poolp.core.data
 
-import pgm.poolp.core.domain.McDonalds
+import xyz.poolp.core.domain.McDonalds
 
 interface PlacesRepository {
     suspend fun postMcDonalds(): List<McDonalds>
