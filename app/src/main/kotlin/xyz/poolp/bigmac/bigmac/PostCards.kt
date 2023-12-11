@@ -58,13 +58,13 @@ fun McDonaldsTitle(mcdonalds: McDonalds) {
 }
 
 @Composable
-fun McDonaldsCardNearby(mcdonalds: McDonalds, roadToMcDonalds: (String) -> Unit) {
+fun McDoCardNearby(mcdo: McDonalds, roadToMcdo: (McDonalds) -> Unit) {
     Row(
         Modifier
-            .clickable(onClick = { roadToMcDonalds(mcdonalds.identifier) })
+            .clickable(onClick = { roadToMcdo(mcdo) })
     ) {
         McDonaldsImage(
-            mcdonalds = mcdonalds,
+            mcdonalds = mcdo,
             modifier = Modifier.padding(16.dp)
         )
         Column(
@@ -73,12 +73,12 @@ fun McDonaldsCardNearby(mcdonalds: McDonalds, roadToMcDonalds: (String) -> Unit)
                 .padding(vertical = 12.dp)
         ) {
             Text(
-                text = stringResource(id = R.string.based_in_locality, mcdonalds.locality.uppercase()),
+                text = stringResource(id = R.string.based_in_locality, mcdo.locality.uppercase()),
                 style = MaterialTheme.typography.labelMedium
             )
-            McDonaldsTitle(mcdonalds = mcdonalds)
+            McDonaldsTitle(mcdonalds = mcdo)
             McDonaldsDistance(
-                mcdonalds = mcdonalds,
+                mcdonalds = mcdo,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }

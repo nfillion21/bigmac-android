@@ -13,7 +13,6 @@ fun BigMacRoute(
     onNavUp: () -> Unit,
 ) {
     val viewModel: BigMacViewModel = hiltViewModel()
-    val bigMacScreenData = viewModel.bigMacScreenData
 
     BackHandler {
         if (!viewModel.onBackPressed()) {
@@ -23,9 +22,6 @@ fun BigMacRoute(
 
     BigMacScreen(
         bigMacViewModel = viewModel,
-        bigMacScreenData = bigMacScreenData,
-        onClosePressed = { onNavUp() },
-        onMcDoPressed = { viewModel.onMcDoPressed() },
-        onPreviousPressed = { viewModel.onPreviousPressed() },
+        onClosePressed = { onNavUp() }
     )
 }

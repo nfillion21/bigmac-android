@@ -32,6 +32,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,10 +41,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.supportWideScreen
-import xyz.poolp.bigmac.viewmodels.BigMacScreenData
 import xyz.poolp.bigmac.viewmodels.BigMacViewModel
 import xyz.poolp.core.domain.McDonalds
 
@@ -54,12 +55,10 @@ private const val CONTENT_ANIMATION_DURATION = 300
 @Composable
 fun BigMacScreen(
     bigMacViewModel: BigMacViewModel,
-    bigMacScreenData: BigMacScreenData,
     onClosePressed: () -> Unit,
-    onPreviousPressed: () -> Unit,
-    onMcDoPressed: (String) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
+    val uiState by bigMacViewModel.uiState.collectAsStateWithLifecycle()
 
     Surface(modifier = Modifier.supportWideScreen()) {
         val topAppBarState = rememberTopAppBarState()
@@ -67,18 +66,18 @@ fun BigMacScreen(
         Scaffold(
             topBar = {
                 BigMacAppBar(
-                    step = bigMacScreenData.step,
-                    title = "Lamorlaye",
+                    step = uiState.step,
+                    title = uiState.mcdonalds.last().first().locality,
                     scrollBehavior = scrollBehavior,
                     onClosePressed = onClosePressed,
-                    onBackPressed = onPreviousPressed,
-                    shouldShowPreviousButton = bigMacScreenData.shouldShowPreviousButton
+                    onBackPressed = { bigMacViewModel.onPreviousPressed() },
+                    shouldShowPreviousButton = uiState.mcdonalds.size > 1
                 )
             },
         )
         { innerPadding ->
             AnimatedContent(
-                targetState = bigMacScreenData,
+                targetState = uiState,
                 transitionSpec = {
                     val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
 
@@ -97,19 +96,11 @@ fun BigMacScreen(
                 },
                 label = "bigMacScreenDataAnimation"
             ) { targetState ->
-
-                when (targetState.step) {
-                    1 -> {
-                        McDonaldsList(
-                            mcdonalds = listOf(
-                                McDonalds(
-                                    identifier = "1",
-                                    formattedAddress = "formattedAddress",
-                                    shortFormattedAddress = "shortFormattedAddress",
-                                    latitude = 3.44,
-                                    longitude = 4.33,
-                                    locality = "Paris"
-                                ),
+                McDonaldsList(
+                    mcdonalds = targetState.mcdonalds,
+                    onMcDoPressed = {
+                        scope.launch {
+                            bigMacViewModel.onMcDonaldsPressed(
                                 McDonalds(
                                     identifier = "2",
                                     formattedAddress = "formattedAddress",
@@ -117,46 +108,14 @@ fun BigMacScreen(
                                     latitude = 3.44,
                                     longitude = 4.33,
                                     locality = "Paris"
-                                ),
-                            ),
-                            onMcDonaldsPressed = {
-                                scope.launch {
-                                    bigMacViewModel.onBigMacPressed()
-                                }
-                            },
-                            modifier = Modifier
-                                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                                .padding(innerPadding)
-                        )
-                    }
-
-                    else -> {
-                        McDonaldsList(
-                            mcdonalds = listOf(
-                                McDonalds(
-                                    identifier = "1",
-                                    formattedAddress = "formattedAddress",
-                                    shortFormattedAddress = "shortFormattedAddress",
-                                    latitude = 3.44,
-                                    longitude = 4.33,
-                                    locality = "Paris"
-                                ),
-                                McDonalds(
-                                    identifier = "2",
-                                    formattedAddress = "formattedAddress",
-                                    shortFormattedAddress = "shortFormattedAddress",
-                                    latitude = 3.44,
-                                    longitude = 4.33,
-                                    locality = "Paris"
-                                ),
-                            ),
-                            onMcDonaldsPressed = onMcDoPressed,
-                            modifier = Modifier
-                                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                                .padding(innerPadding)
-                        )
-                    }
-                }
+                                )
+                            )
+                        }
+                    },
+                    modifier = Modifier
+                        .nestedScroll(scrollBehavior.nestedScrollConnection)
+                        .padding(innerPadding)
+                )
             }
         }
     }
@@ -237,8 +196,8 @@ private fun BigMacAppBar(
 
 @Composable
 fun McDonaldsList(
-    mcdonalds: List<McDonalds>,
-    onMcDonaldsPressed: (postId: String) -> Unit,
+    mcdonalds: MutableList<List<McDonalds>>,
+    onMcDoPressed: (mcdo: McDonalds) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     state: LazyListState = rememberLazyListState(),
@@ -250,16 +209,23 @@ fun McDonaldsList(
     ) {
         item {
             McDonaldsListTopSection(
-                mcdonalds.first(),
-                onMcDonaldsPressed
+                mcdonalds.last().first(),
+                onMcDoPressed
             )
         }
-        item { McDonaldsListHistorySection(mcdonalds.drop(1), onMcDonaldsPressed) }
+        if (mcdonalds.size > 1) {
+            item {
+                McDonaldsListHistorySection(
+                    mcdonalds.last().drop(1),
+                    onMcDoPressed
+                )
+            }
+        }
     }
 }
 
 @Composable
-private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (String) -> Unit) {
+private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (McDonalds) -> Unit) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
         text = stringResource(id = R.string.mcdo_around_you_title),
@@ -267,7 +233,7 @@ private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (Stri
     )
     McDonaldsCardTop(
         mcdonalds = mcdonalds,
-        modifier = Modifier.clickable(onClick = { roadToMcDonalds(mcdonalds.identifier) })
+        modifier = Modifier.clickable(onClick = {/*roadToMcDonalds(mcdonalds.identifier)*/ })
     )
     PostListDivider()
 }
@@ -281,11 +247,11 @@ private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (Stri
 @Composable
 private fun McDonaldsListHistorySection(
     mcdonalds: List<McDonalds>,
-    roadToMcDonalds: (String) -> Unit
+    roadToMcDonalds: (McDonalds) -> Unit
 ) {
     Column {
         mcdonalds.forEach { mcdo ->
-            McDonaldsCardNearby(mcdo, roadToMcDonalds)
+            McDoCardNearby(mcdo, roadToMcDonalds)
             PostListDivider()
         }
     }
