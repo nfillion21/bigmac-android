@@ -59,7 +59,7 @@ class BigMacViewModel @Inject internal constructor(
      * Returns true if the ViewModel handled the back press (i.e., it went back one page)
      */
     fun onBackPressed(): Boolean {
-        if (_uiState.value.mcdonalds.isEmpty()) {
+        if (_uiState.value.mcdonalds.size <= 1) {
             return false
         }
         backToPreviousMcDonalds()
@@ -73,18 +73,6 @@ class BigMacViewModel @Inject internal constructor(
         backToPreviousMcDonalds()
     }
 
-    fun onMcDoPressed(mcdonalds: McDonalds) {
-        val list = _uiState.value.mcdonalds
-        _uiState.update {
-            it.copy(
-                mcdonalds = list.apply {
-                    add(listOf(mcdonalds))
-                }
-            )
-        }
-        switchStep(increase = true)
-    }
-
     private fun backToPreviousMcDonalds() {
         val list = _uiState.value.mcdonalds
         _uiState.update {
@@ -94,17 +82,28 @@ class BigMacViewModel @Inject internal constructor(
                 }
             )
         }
-        switchStep(increase = false)
+        moveStep(increase = false)
     }
 
     suspend fun onMcDonaldsPressed(mcDonalds: McDonalds) {
         viewModelScope.launch {
-            val k = postMcDonaldsUseCase.invoke()
-            val k2 = "hello world"
+            val mcdonalds = postMcDonaldsUseCase.invoke(
+                latitude = mcDonalds.latitude,
+                longitude = mcDonalds.longitude
+            )
+            _uiState.update {
+                it.copy(
+                    mcdonalds = it.mcdonalds.apply {
+                        removeLast()
+                        add(mcdonalds)
+                    }
+                )
+            }
+            moveStep(increase = true)
         }
     }
 
-    private fun switchStep(increase:Boolean) {
+    private fun moveStep(increase:Boolean) {
         _uiState.update {
             it.copy(
                 step = if (increase) _uiState.value.step + 1 else _uiState.value.step -1

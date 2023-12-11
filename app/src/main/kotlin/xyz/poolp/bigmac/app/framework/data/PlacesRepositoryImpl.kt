@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpClient) :
     PlacesRepository {
-    override suspend fun postMcDonalds(): List<McDonalds> {
+    override suspend fun postMcDonalds(latitude:Double, longitude:Double): List<McDonalds> {
 
         val mcDonaldsRemote: McDonaldsRemote =
             ktorHttpClient.post("https://places.googleapis.com/v1/places:searchText") {
@@ -27,8 +27,8 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                         locationBias = McDonaldsPostBodyLocationBias(
                             circle = McDonaldsPostBodyCircle(
                                 center = McDonaldsPostBodyLocation(
-                                    latitude = 49.145964299999996,
-                                    longitude = 2.4415903
+                                    latitude = latitude,
+                                    longitude = longitude
                                 ),
                                 radius = 50000.0
                             ),

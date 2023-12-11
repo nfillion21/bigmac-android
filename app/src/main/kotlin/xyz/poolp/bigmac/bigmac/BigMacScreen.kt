@@ -94,22 +94,15 @@ fun BigMacScreen(
                         animationSpec = animationSpec
                     )
                 },
-                label = "bigMacScreenDataAnimation"
+                label = "BigMacScreenDataAnimation"
             ) { targetState ->
+
+                val list = targetState.mcdonalds
                 McDonaldsList(
                     mcdonalds = targetState.mcdonalds,
                     onMcDoPressed = {
                         scope.launch {
-                            bigMacViewModel.onMcDonaldsPressed(
-                                McDonalds(
-                                    identifier = "2",
-                                    formattedAddress = "formattedAddress",
-                                    shortFormattedAddress = "shortFormattedAddress",
-                                    latitude = 3.44,
-                                    longitude = 4.33,
-                                    locality = "Paris"
-                                )
-                            )
+                            bigMacViewModel.onMcDonaldsPressed(it)
                         }
                     },
                     modifier = Modifier
@@ -213,7 +206,7 @@ fun McDonaldsList(
                 onMcDoPressed
             )
         }
-        if (mcdonalds.size > 1) {
+        if (mcdonalds.last().size > 1) {
             item {
                 McDonaldsListHistorySection(
                     mcdonalds.last().drop(1),
@@ -233,7 +226,7 @@ private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (McDo
     )
     McDonaldsCardTop(
         mcdonalds = mcdonalds,
-        modifier = Modifier.clickable(onClick = {/*roadToMcDonalds(mcdonalds.identifier)*/ })
+        modifier = Modifier.clickable(onClick = { roadToMcDonalds(mcdonalds) })
     )
     PostListDivider()
 }
