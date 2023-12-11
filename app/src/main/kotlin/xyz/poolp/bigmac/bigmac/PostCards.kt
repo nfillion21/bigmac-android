@@ -50,7 +50,7 @@ fun McDonaldsImage(mcdonalds: McDonalds, modifier: Modifier = Modifier) {
 @Composable
 fun McDonaldsTitle(mcdonalds: McDonalds) {
     Text(
-        text = mcdonalds.shortFormattedAddress,
+        text = mcdonalds.formattedAddress,
         style = MaterialTheme.typography.titleMedium,
         maxLines = 3,
         overflow = TextOverflow.Ellipsis,

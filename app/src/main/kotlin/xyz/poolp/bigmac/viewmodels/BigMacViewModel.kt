@@ -74,18 +74,24 @@ class BigMacViewModel @Inject internal constructor(
     }
 
     private fun backToPreviousMcDonalds() {
-        val list = _uiState.value.mcdonalds
         _uiState.update {
             it.copy(
-                mcdonalds = list.apply {
-                    dropLast(1)
-                }
+                mcdonalds = it.mcdonalds.dropLast(1)
             )
         }
-        moveStep(increase = false)
+        //moveStep(increase = false)
     }
 
-    suspend fun onMcDonaldsPressed(mcDonalds: McDonalds) {
+    fun onMcDoItemPressed(mcDo: McDonalds) {
+        _uiState.update {
+            it.copy(
+                mcdonalds = (it.mcdonalds + listOf(listOf(mcDo)))
+            )
+        }
+        //moveStep(increase = true)
+    }
+
+    suspend fun onCurrentMcDoPressed(mcDonalds: McDonalds) {
         viewModelScope.launch {
             val mcdonalds = postMcDonaldsUseCase.invoke(
                 latitude = mcDonalds.latitude,
@@ -93,27 +99,23 @@ class BigMacViewModel @Inject internal constructor(
             )
             _uiState.update {
                 it.copy(
-                    mcdonalds = it.mcdonalds.apply {
-                        removeLast()
-                        add(mcdonalds)
-                    }
+                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
                 )
             }
-            moveStep(increase = true)
         }
     }
 
-    private fun moveStep(increase:Boolean) {
+    private fun moveStep(increase: Boolean) {
         _uiState.update {
             it.copy(
-                step = if (increase) _uiState.value.step + 1 else _uiState.value.step -1
+                step = if (increase) _uiState.value.step + 1 else _uiState.value.step - 1
             )
         }
     }
 }
 
 data class BigMacUIState(
-    val mcdonalds: MutableList<List<McDonalds>> = mutableListOf(
+    val mcdonalds: List<List<McDonalds>> = listOf(
         listOf(
             McDonalds(
                 identifier = "ChIJb_DalK1H5kcRQUZGWQPkr5g",

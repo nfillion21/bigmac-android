@@ -2,8 +2,13 @@ package xyz.poolp.bigmac.bigmac
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -66,7 +71,7 @@ fun BigMacScreen(
         Scaffold(
             topBar = {
                 BigMacAppBar(
-                    step = uiState.step,
+                    step = uiState.mcdonalds.size,
                     title = uiState.mcdonalds.last().first().locality,
                     scrollBehavior = scrollBehavior,
                     onClosePressed = onClosePressed,
@@ -79,30 +84,43 @@ fun BigMacScreen(
             AnimatedContent(
                 targetState = uiState,
                 transitionSpec = {
-                    val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
 
-                    val direction = getTransitionDirection(
-                        initialIndex = initialState.step,
-                        targetIndex = targetState.step,
-                    )
+                    val initial = initialState.mcdonalds.size
+                    val target = targetState.mcdonalds.size
 
-                    slideIntoContainer(
-                        towards = direction,
-                        animationSpec = animationSpec,
-                    ) togetherWith slideOutOfContainer(
-                        towards = direction,
-                        animationSpec = animationSpec
-                    )
+                    if (initial != target)
+                    {
+                        val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
+                        val direction = getTransitionDirection(
+                            initialIndex = initialState.mcdonalds.size,
+                            targetIndex = targetState.mcdonalds.size
+                        )
+
+                        slideIntoContainer(
+                            towards = direction,
+                            animationSpec = animationSpec,
+                        ) togetherWith slideOutOfContainer(
+                            towards = direction,
+                            animationSpec = animationSpec
+                        )
+                    } else
+                    {
+                        EnterTransition.None togetherWith ExitTransition.None
+                    }
                 },
+                //transitionSpec = null,
                 label = "BigMacScreenDataAnimation"
             ) { targetState ->
-
-                val list = targetState.mcdonalds
                 McDonaldsList(
                     mcdonalds = targetState.mcdonalds,
-                    onMcDoPressed = {
+                    onMcDoItemPressed = {
                         scope.launch {
-                            bigMacViewModel.onMcDonaldsPressed(it)
+                            bigMacViewModel.onMcDoItemPressed(it)
+                        }
+                    },
+                    onCurrentMcDoPressed = {
+                        scope.launch {
+                            bigMacViewModel.onCurrentMcDoPressed(it)
                         }
                     },
                     modifier = Modifier
@@ -153,7 +171,7 @@ private fun BigMacAppBar(
                         .size(36.dp)
                 )
                 Text(
-                    text = stringResource(R.string.mcdonalds_in, step + 1, title),
+                    text = stringResource(R.string.mcdonalds_in, step, title),
                     style = MaterialTheme.typography.labelLarge,
                     modifier = Modifier.padding(start = 8.dp)
                 )
@@ -189,8 +207,9 @@ private fun BigMacAppBar(
 
 @Composable
 fun McDonaldsList(
-    mcdonalds: MutableList<List<McDonalds>>,
-    onMcDoPressed: (mcdo: McDonalds) -> Unit,
+    mcdonalds: List<List<McDonalds>>,
+    onCurrentMcDoPressed: (mcdo: McDonalds) -> Unit,
+    onMcDoItemPressed: (mcdo: McDonalds) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     state: LazyListState = rememberLazyListState(),
@@ -203,14 +222,14 @@ fun McDonaldsList(
         item {
             McDonaldsListTopSection(
                 mcdonalds.last().first(),
-                onMcDoPressed
+                onCurrentMcDoPressed
             )
         }
         if (mcdonalds.last().size > 1) {
             item {
                 McDonaldsListHistorySection(
                     mcdonalds.last().drop(1),
-                    onMcDoPressed
+                    onMcDoItemPressed
                 )
             }
         }

@@ -23,14 +23,14 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                 setBody(
                     McDonaldsPostBody(
                         textQuery = "McDonald's",
-                        maxResultCount = 11,
+                        maxResultCount = 20,
                         locationBias = McDonaldsPostBodyLocationBias(
                             circle = McDonaldsPostBodyCircle(
                                 center = McDonaldsPostBodyLocation(
                                     latitude = latitude,
                                     longitude = longitude
                                 ),
-                                radius = 50000.0
+                                radius = 0.0
                             ),
                         )
                     )
