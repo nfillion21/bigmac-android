@@ -8,6 +8,7 @@ object Versions {
     const val composeUiToolingPreview = "ui-tooling-preview"
     const val composeMaterial3 = "material3"
     const val composeMaterial = "1.5.2"
+    const val mapUtils = "3.8.0"
 
     const val junit = "4.13.2"
     const val androidTestJUnit = "1.1.5"

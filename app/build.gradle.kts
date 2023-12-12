@@ -69,6 +69,8 @@ dependencies {
     implementation(Dependencies.composeUiToolingPreview)
     implementation(Dependencies.composeMaterial3)
     implementation(Dependencies.composeMaterial)
+    implementation(Dependencies.mapUtils)
+
     implementation(project(":core"))
     testImplementation(Dependencies.junit)
     androidTestImplementation(Dependencies.androidTestJUnit)

@@ -17,7 +17,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.LatLng
 import xyz.poolp.bigmac.R
+import xyz.poolp.bigmac.util.direction
 import xyz.poolp.core.domain.McDonalds
 
 @Composable
@@ -38,12 +40,18 @@ fun McDonaldsDistance(
     val distance = locationCurrentMcDo.distanceTo(locationMcDo) / 1000.0f
     val dec = DecimalFormat("#,##0.000")
 
+    val latLngCurrentMcDo = LatLng(currentMcDo.latitude, currentMcDo.longitude)
+    val latLngMcDo = LatLng(mcDo.latitude, mcDo.longitude)
+    val locationDirection = latLngCurrentMcDo.direction(latLngMcDo)
+
     Row(modifier) {
         Text(
             text = stringResource(
                 id = R.string.distance_km,
                 formatArgs = arrayOf(
-                    dec.format(distance), step
+                    dec.format(distance),
+                    locationDirection.description,
+                    step
                 )
             ),
             style = MaterialTheme.typography.bodyMedium

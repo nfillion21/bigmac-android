@@ -11,6 +11,8 @@ object Dependencies {
     val composeMaterial3 by lazy {"androidx.compose.material3:${Versions.composeMaterial3}"}
     val composeMaterial by lazy {"androidx.compose.material:material:${Versions.composeMaterial}"}
 
+    val mapUtils by lazy {"com.google.maps.android:android-maps-utils:${Versions.mapUtils}"}
+
     val junit by lazy {"junit:junit:${Versions.junit}"}
     val androidTestJUnit by lazy {"androidx.test.ext:junit:${Versions.androidTestJUnit}"}
     val androidTestEspresso by lazy {"androidx.test.espresso:espresso-core:${Versions.androidTestEspresso}"}

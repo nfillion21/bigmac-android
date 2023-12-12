@@ -19,7 +19,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.google.android.gms.maps.model.LatLng
 import xyz.poolp.bigmac.R
+import xyz.poolp.bigmac.util.direction
 import xyz.poolp.core.domain.McDonalds
 
 @Composable
@@ -58,6 +60,7 @@ fun McDonaldsCardTop(
         )
 
         if (lamorlayeMcDo.identifier != mcDo.identifier) {
+
             val locationLamorlayeMcDo = Location(null)
             locationLamorlayeMcDo.latitude = lamorlayeMcDo.latitude
             locationLamorlayeMcDo.longitude = lamorlayeMcDo.longitude
@@ -69,11 +72,15 @@ fun McDonaldsCardTop(
             val distance = locationLamorlayeMcDo.distanceTo(locationMcdo) / 1000.0f
             val dec = DecimalFormat("#,##0.000")
 
+            val latLngLamorlayeMcDo = LatLng(lamorlayeMcDo.latitude, lamorlayeMcDo.longitude)
+            val latLngMcDo = LatLng(mcDo.latitude, mcDo.longitude)
+            val locationDirection = latLngLamorlayeMcDo.direction(latLngMcDo)
+
             Text(
                 text = stringResource(
                     id = R.string.distance_from_lamorlaye_km,
                     formatArgs = arrayOf(
-                        dec.format(distance)
+                        dec.format(distance), locationDirection.description
                     )
                 ),
                 style = typography.bodySmall,

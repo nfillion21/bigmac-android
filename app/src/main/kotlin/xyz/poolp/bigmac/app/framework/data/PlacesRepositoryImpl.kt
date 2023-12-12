@@ -30,7 +30,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                                     latitude = latitude,
                                     longitude = longitude
                                 ),
-                                radius = 0.0
+                                radius = 500.0
                             ),
                         )
                     )
