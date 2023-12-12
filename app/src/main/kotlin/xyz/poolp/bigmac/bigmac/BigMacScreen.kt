@@ -6,9 +6,6 @@ import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -88,12 +85,11 @@ fun BigMacScreen(
                     val initial = initialState.mcdonalds.size
                     val target = targetState.mcdonalds.size
 
-                    if (initial != target)
-                    {
+                    if (initial != target) {
                         val animationSpec: TweenSpec<IntOffset> = tween(CONTENT_ANIMATION_DURATION)
                         val direction = getTransitionDirection(
-                            initialIndex = initialState.mcdonalds.size,
-                            targetIndex = targetState.mcdonalds.size
+                            initialIndex = initial,
+                            targetIndex = target
                         )
 
                         slideIntoContainer(
@@ -103,8 +99,7 @@ fun BigMacScreen(
                             towards = direction,
                             animationSpec = animationSpec
                         )
-                    } else
-                    {
+                    } else {
                         EnterTransition.None togetherWith ExitTransition.None
                     }
                 },
@@ -221,15 +216,19 @@ fun McDonaldsList(
     ) {
         item {
             McDonaldsListTopSection(
-                mcdonalds.last().first(),
-                onCurrentMcDoPressed
+                mcdonalds = mcdonalds.last().first(),
+                lamorlayeMcDo = mcdonalds.first().first(),
+                step = mcdonalds.size,
+                roadToMcDonalds = onCurrentMcDoPressed
             )
         }
         if (mcdonalds.last().size > 1) {
             item {
                 McDonaldsListHistorySection(
-                    mcdonalds.last().drop(1),
-                    onMcDoItemPressed
+                    mcdonalds = mcdonalds.last().drop(1),
+                    currentMcDo = mcdonalds.last().first(),
+                    step = mcdonalds.size,
+                    roadToMcDonalds = onMcDoItemPressed
                 )
             }
         }
@@ -237,14 +236,21 @@ fun McDonaldsList(
 }
 
 @Composable
-private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (McDonalds) -> Unit) {
+private fun McDonaldsListTopSection(
+    mcdonalds: McDonalds,
+    lamorlayeMcDo: McDonalds,
+    step: Int,
+    roadToMcDonalds: (McDonalds) -> Unit
+) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
         text = stringResource(id = R.string.mcdo_around_you_title),
         style = MaterialTheme.typography.titleMedium
     )
     McDonaldsCardTop(
-        mcdonalds = mcdonalds,
+        mcDo = mcdonalds,
+        lamorlayeMcDo = lamorlayeMcDo,
+        step = step,
         modifier = Modifier.clickable(onClick = { roadToMcDonalds(mcdonalds) })
     )
     PostListDivider()
@@ -259,11 +265,18 @@ private fun McDonaldsListTopSection(mcdonalds: McDonalds, roadToMcDonalds: (McDo
 @Composable
 private fun McDonaldsListHistorySection(
     mcdonalds: List<McDonalds>,
+    currentMcDo: McDonalds,
+    step: Int,
     roadToMcDonalds: (McDonalds) -> Unit
 ) {
     Column {
         mcdonalds.forEach { mcdo ->
-            McDoCardNearby(mcdo, roadToMcDonalds)
+            McDoCardNearby(
+                mcdo = mcdo,
+                currentMcDo = currentMcDo,
+                step = step,
+                roadToMcdo = roadToMcDonalds
+            )
             PostListDivider()
         }
     }

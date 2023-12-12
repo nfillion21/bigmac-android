@@ -1,5 +1,7 @@
 package xyz.poolp.bigmac.bigmac
 
+import android.icu.text.DecimalFormat
+import android.location.Location
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -20,15 +22,28 @@ import xyz.poolp.core.domain.McDonalds
 
 @Composable
 fun McDonaldsDistance(
-    mcdonalds: McDonalds,
+    mcDo: McDonalds,
+    currentMcDo: McDonalds,
+    step: Int,
     modifier: Modifier = Modifier
 ) {
+    val locationCurrentMcDo = Location(null)
+    locationCurrentMcDo.latitude = currentMcDo.latitude
+    locationCurrentMcDo.longitude = currentMcDo.longitude
+
+    val locationMcDo = Location(null)
+    locationMcDo.latitude = mcDo.latitude
+    locationMcDo.longitude = mcDo.longitude
+
+    val distance = locationCurrentMcDo.distanceTo(locationMcDo) / 1000.0f
+    val dec = DecimalFormat("#,##0.000")
+
     Row(modifier) {
         Text(
             text = stringResource(
                 id = R.string.distance_km,
                 formatArgs = arrayOf(
-                    1
+                    dec.format(distance), step
                 )
             ),
             style = MaterialTheme.typography.bodyMedium
@@ -58,7 +73,12 @@ fun McDonaldsTitle(mcdonalds: McDonalds) {
 }
 
 @Composable
-fun McDoCardNearby(mcdo: McDonalds, roadToMcdo: (McDonalds) -> Unit) {
+fun McDoCardNearby(
+    mcdo: McDonalds,
+    currentMcDo:McDonalds,
+    step: Int,
+    roadToMcdo: (McDonalds) -> Unit
+) {
     Row(
         Modifier
             .clickable(onClick = { roadToMcdo(mcdo) })
@@ -78,7 +98,9 @@ fun McDoCardNearby(mcdo: McDonalds, roadToMcdo: (McDonalds) -> Unit) {
             )
             McDonaldsTitle(mcdonalds = mcdo)
             McDonaldsDistance(
-                mcdonalds = mcdo,
+                mcDo = mcdo,
+                currentMcDo = currentMcDo,
+                step = step,
                 modifier = Modifier.padding(top = 4.dp)
             )
         }
