@@ -57,7 +57,7 @@ fun McDonaldsCardTop(
             style = typography.labelLarge,
         )
 
-        if (lamorlayeMcDo != mcDo) {
+        if (lamorlayeMcDo.identifier != mcDo.identifier) {
             val locationLamorlayeMcDo = Location(null)
             locationLamorlayeMcDo.latitude = lamorlayeMcDo.latitude
             locationLamorlayeMcDo.longitude = lamorlayeMcDo.longitude

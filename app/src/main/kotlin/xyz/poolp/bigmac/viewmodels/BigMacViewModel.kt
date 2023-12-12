@@ -20,6 +20,21 @@ class BigMacViewModel @Inject internal constructor(
     private val _uiState = MutableStateFlow(BigMacUIState())
     val uiState: StateFlow<BigMacUIState> = _uiState
 
+    init {
+        viewModelScope.launch {
+            val lamorLayeMcDo = _uiState.value.mcdonalds.first().first()
+            val mcdonalds = postMcDonaldsUseCase.invoke(
+                latitude = lamorLayeMcDo.latitude,
+                longitude = lamorLayeMcDo.longitude
+            )
+            _uiState.update {
+                it.copy(
+                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
+                )
+            }
+        }
+    }
+
     //private var step = 0
 
     /*
@@ -88,7 +103,17 @@ class BigMacViewModel @Inject internal constructor(
                 mcdonalds = (it.mcdonalds + listOf(listOf(mcDo)))
             )
         }
-        //moveStep(increase = true)
+        viewModelScope.launch {
+            val mcdonalds = postMcDonaldsUseCase.invoke(
+                latitude = mcDo.latitude,
+                longitude = mcDo.longitude
+            )
+            _uiState.update {
+                it.copy(
+                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
+                )
+            }
+        }
     }
 
     suspend fun onCurrentMcDoPressed(mcDonalds: McDonalds) {
@@ -102,14 +127,6 @@ class BigMacViewModel @Inject internal constructor(
                     mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
                 )
             }
-        }
-    }
-
-    private fun moveStep(increase: Boolean) {
-        _uiState.update {
-            it.copy(
-                step = if (increase) _uiState.value.step + 1 else _uiState.value.step - 1
-            )
         }
     }
 }
@@ -126,8 +143,7 @@ data class BigMacUIState(
                 locality = "Lamorlaye"
             )
         )
-    ),
-    val step: Int = 0
+    )
 )
 
 /*
