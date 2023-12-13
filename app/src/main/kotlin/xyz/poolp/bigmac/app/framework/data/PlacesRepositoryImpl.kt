@@ -12,7 +12,6 @@ import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyCircle
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsRemote
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsRemotePhoto
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonalds
 import xyz.poolp.core.domain.McDonaldsPhoto
@@ -75,7 +74,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                     latitude = location.latitude,
                     longitude = location.longitude,
                     locality = city,
-                    photos = photos
+                    photosNames = photos
                 )
             }
         }
@@ -87,8 +86,8 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                 url {
                     parameters.append("key", Env.PLACES_API_KEY)
                     parameters.append("skipHttpRedirect", "true")
+                    parameters.append("maxWidthPx", "1000")
                     //parameters.append("maxHeightPx", 300)
-                    //parameters.append("maxWidthPx", 1000)
                 }
             }.body()
 

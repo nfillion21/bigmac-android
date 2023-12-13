@@ -7,7 +7,8 @@ data class McDonalds(
     val latitude:Double,
     val longitude:Double,
     val locality: String,
-    val photos: List<McDonaldsPhotoName>
+    val photosNames: List<McDonaldsPhotoName>,
+    var photo: McDonaldsPhoto? = null
 )
 
 data class McDonaldsPhotoName(

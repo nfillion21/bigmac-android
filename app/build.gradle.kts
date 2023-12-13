@@ -89,6 +89,8 @@ dependencies {
     implementation(Dependencies.ktorSerializationJSON)
     implementation(Dependencies.ktorContentNegotiation)
     implementation(Dependencies.ktorClientLogging)
+
+    implementation(Dependencies.coil)
 }
 
 // Allow references to generated code

@@ -1,5 +1,6 @@
 package xyz.poolp.bigmac.viewmodels
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -8,12 +9,14 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import xyz.poolp.core.domain.McDonalds
+import xyz.poolp.core.usecase.GetMcDonaldsPhotoUseCase
 import xyz.poolp.core.usecase.PostMcDonaldsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class BigMacViewModel @Inject internal constructor(
-    private val postMcDonaldsUseCase: PostMcDonaldsUseCase
+    private val postMcDonaldsUseCase: PostMcDonaldsUseCase,
+    private val getMcDonaldsPhotoUseCase: GetMcDonaldsPhotoUseCase
 ) : ViewModel() {
 
     // UI state exposed to the UI
@@ -113,34 +116,35 @@ class BigMacViewModel @Inject internal constructor(
                     mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
                 )
             }
+
+            val firstMcDo = _uiState.value.mcdonalds.last().first()
+            firstMcDo.photo = getMcDonaldsPhotoUseCase.invoke(name = firstMcDo.photosNames.first().name)
+            val lastMcDonalds = _uiState.value.mcdonalds.last()
+            _uiState.update {
+                it.copy(
+                    mcdonalds = it.mcdonalds.dropLast(1) + (listOf(listOf(firstMcDo) + lastMcDonalds.drop(1)))
+                )
+            }
         }
     }
 
-    suspend fun onCurrentMcDoPressed(mcDonalds: McDonalds) {
+    suspend fun onCurrentMcDoPressed(mcDo: McDonalds) {
         viewModelScope.launch {
-            val mcdonalds = postMcDonaldsUseCase.invoke(
-                latitude = mcDonalds.latitude,
-                longitude = mcDonalds.longitude
-            )
-            _uiState.update {
-                it.copy(
-                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
-                )
-            }
         }
     }
 }
 
 data class BigMacUIState(
-    val mcdonalds: List<List<McDonalds>> = listOf(
-        listOf(
+    val mcdonalds: List<List<McDonalds>> = mutableStateListOf(
+        mutableStateListOf(
             McDonalds(
                 identifier = "ChIJb_DalK1H5kcRQUZGWQPkr5g",
                 formattedAddress = "2 Av. de la Libération, 60260 Lamorlaye, France",
                 shortFormattedAddress = "2 Av. de la Libération, Lamorlaye",
                 latitude = 49.145964299999996,
                 longitude = 2.4415903,
-                locality = "Lamorlaye"
+                locality = "Lamorlaye",
+                photosNames = emptyList()
             )
         )
     )

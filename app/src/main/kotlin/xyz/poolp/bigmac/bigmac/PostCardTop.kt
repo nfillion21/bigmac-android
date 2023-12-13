@@ -8,7 +8,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -16,9 +19,13 @@ import androidx.compose.runtime.currentCompositionLocalContext
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import coil.compose.SubcomposeAsyncImage
+import coil.request.ImageRequest
 import com.google.android.gms.maps.model.LatLng
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.direction
@@ -28,7 +35,7 @@ import xyz.poolp.core.domain.McDonalds
 fun McDonaldsCardTop(
     mcDo: McDonalds,
     lamorlayeMcDo: McDonalds,
-    step:Int,
+    step: Int,
     modifier: Modifier = Modifier
 ) {
     val typography = MaterialTheme.typography
@@ -41,14 +48,21 @@ fun McDonaldsCardTop(
             //.heightIn(min = 180.dp)
             .fillMaxWidth()
             .clip(shape = MaterialTheme.shapes.medium)
-        Image(
-            painter = painterResource(R.drawable.current_mcdonalds),
-            contentDescription = null, // decorative
-            modifier = imageModifier,
-            contentScale = ContentScale.FillWidth
-        )
-        Spacer(Modifier.height(16.dp))
 
+        mcDo.photo?.let {
+            AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(it.url)
+                    .crossfade(true)
+                    .build(),
+                //placeholder = painterResource(R.drawable.current_mcdonalds),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = imageModifier
+            )
+        } ?: CircularProgressIndicator()
+
+        Spacer(Modifier.height(16.dp))
         Text(
             text = mcDo.formattedAddress,
             style = typography.titleLarge,

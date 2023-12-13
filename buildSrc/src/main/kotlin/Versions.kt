@@ -23,4 +23,6 @@ object Versions {
 
     const val hiltNavigationComposeVersion = "1.0.0"
     const val navigationComposeVersion = "2.7.0"
+
+    const val coil = "2.5.0"
 }
