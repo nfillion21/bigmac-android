@@ -224,7 +224,7 @@ fun McDonaldsList(
         }
         if (mcdonalds.last().size > 1) {
             item {
-                McDonaldsListHistorySection(
+                McDonaldsNearbyListSection(
                     mcdonalds = mcdonalds.last().drop(1),
                     currentMcDo = mcdonalds.last().first(),
                     step = mcdonalds.size,
@@ -263,7 +263,7 @@ private fun McDonaldsListTopSection(
  * @param roadToMcDonalds (event) request navigation to Article screen
  */
 @Composable
-private fun McDonaldsListHistorySection(
+private fun McDonaldsNearbyListSection(
     mcdonalds: List<McDonalds>,
     currentMcDo: McDonalds,
     step: Int,

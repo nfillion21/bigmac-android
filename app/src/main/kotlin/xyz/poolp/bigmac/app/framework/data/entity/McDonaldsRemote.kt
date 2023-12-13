@@ -12,7 +12,8 @@ data class McDonaldsRemotePlaces(
     val formattedAddress: String,
     val location: McDonaldsRemoteLocation,
     val shortFormattedAddress: String,
-    val addressComponents: List<McDonaldsRemoteAddressComponent>
+    val addressComponents: List<McDonaldsRemoteAddressComponent>,
+    val photos: List<McDonaldsRemotePhoto>
 )
 
 @Serializable
@@ -21,6 +22,13 @@ data class McDonaldsRemoteAddressComponent(
     val shortText: String,
     val types: List<String>,
     val languageCode: String
+)
+
+@Serializable
+data class McDonaldsRemotePhoto(
+    val name: String,
+    val widthPx: Int,
+    val heightPx: Int
 )
 
 @Serializable

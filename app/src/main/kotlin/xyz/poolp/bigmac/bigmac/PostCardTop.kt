@@ -39,13 +39,13 @@ fun McDonaldsCardTop(
     ) {
         val imageModifier = Modifier
             //.heightIn(min = 180.dp)
-            //.fillMaxWidth()
+            .fillMaxWidth()
             .clip(shape = MaterialTheme.shapes.medium)
         Image(
             painter = painterResource(R.drawable.current_mcdonalds),
             contentDescription = null, // decorative
             modifier = imageModifier,
-            contentScale = ContentScale.Fit
+            contentScale = ContentScale.FillWidth
         )
         Spacer(Modifier.height(16.dp))
 
