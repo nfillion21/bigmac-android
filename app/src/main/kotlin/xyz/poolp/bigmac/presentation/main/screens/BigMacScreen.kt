@@ -116,11 +116,6 @@ fun BigMacScreen(
                             bigMacViewModel.onMcDoItemPressed(it)
                         }
                     },
-                    onCurrentMcDoPressed = {
-                        scope.launch {
-                            bigMacViewModel.onCurrentMcDoPressed(it)
-                        }
-                    },
                     modifier = Modifier
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .padding(innerPadding)
@@ -206,7 +201,6 @@ private fun BigMacAppBar(
 @Composable
 fun McDonaldsList(
     mcdonalds: List<List<McDonalds>>,
-    onCurrentMcDoPressed: (mcdo: McDonalds) -> Unit,
     onMcDoItemPressed: (mcdo: McDonalds) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -221,8 +215,7 @@ fun McDonaldsList(
             McDonaldsListTopSection(
                 mcdonalds = mcdonalds.last().first(),
                 lamorlayeMcDo = mcdonalds.first().first(),
-                step = mcdonalds.size,
-                roadToMcDonalds = onCurrentMcDoPressed
+                step = mcdonalds.size
             )
         }
         item {
@@ -247,8 +240,7 @@ fun McDonaldsList(
 private fun McDonaldsListTopSection(
     mcdonalds: McDonalds,
     lamorlayeMcDo: McDonalds,
-    step: Int,
-    roadToMcDonalds: (McDonalds) -> Unit
+    step: Int
 ) {
     Text(
         modifier = Modifier.padding(start = 16.dp, top = 16.dp, end = 16.dp),
@@ -258,8 +250,7 @@ private fun McDonaldsListTopSection(
     McDonaldsCardTop(
         mcDo = mcdonalds,
         lamorlayeMcDo = lamorlayeMcDo,
-        step = step,
-        modifier = Modifier.clickable(onClick = { roadToMcDonalds(mcdonalds) })
+        step = step
     )
     PostListDivider()
 }

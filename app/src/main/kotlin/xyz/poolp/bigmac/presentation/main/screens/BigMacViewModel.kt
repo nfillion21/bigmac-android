@@ -87,11 +87,6 @@ class BigMacViewModel @Inject internal constructor(
             getMcDonalds(mcDo)
         }
     }
-
-    suspend fun onCurrentMcDoPressed(mcDo: McDonalds) {
-        viewModelScope.launch {
-        }
-    }
 }
 
 data class BigMacUIState(

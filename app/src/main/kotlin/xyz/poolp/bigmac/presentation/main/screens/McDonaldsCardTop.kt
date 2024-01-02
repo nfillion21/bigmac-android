@@ -34,12 +34,11 @@ import xyz.poolp.core.domain.McDonalds
 fun McDonaldsCardTop(
     mcDo: McDonalds,
     lamorlayeMcDo: McDonalds,
-    step: Int,
-    modifier: Modifier = Modifier
+    step: Int
 ) {
     val typography = MaterialTheme.typography
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(16.dp)
     ) {
