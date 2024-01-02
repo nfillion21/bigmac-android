@@ -8,7 +8,6 @@ import androidx.compose.animation.core.TweenSpec
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -118,6 +117,9 @@ fun BigMacScreen(
                             bigMacViewModel.onMcDoItemPressed(it)
                         }
                     },
+                    retryMcDonalds = {
+                        scope.launch { bigMacViewModel.loadMcDonalds() }
+                    },
                     modifier = Modifier
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .padding(innerPadding)
@@ -204,6 +206,7 @@ private fun BigMacAppBar(
 fun McDonaldsList(
     bigMacState: BigMacUIState,
     onMcDoItemPressed: (mcdo: McDonalds) -> Unit,
+    retryMcDonalds: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     state: LazyListState = rememberLazyListState(),
@@ -235,15 +238,13 @@ fun McDonaldsList(
                 }
 
                 is McDonaldsViewState.Failure -> {
-                    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
-                        FilledTonalButton(
-                            onClick = {},
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp),
-                        ) {
-                            Text(text = stringResource(id = R.string.an_error_occurred))
-                        }
+                    FilledTonalButton(
+                        onClick = retryMcDonalds,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                    ) {
+                        Text(text = stringResource(id = R.string.an_error_occurred))
                     }
                 }
 

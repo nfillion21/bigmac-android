@@ -24,10 +24,7 @@ class BigMacViewModel @Inject internal constructor(
     val uiState: StateFlow<BigMacUIState> = _uiState
 
     init {
-        viewModelScope.launch {
-            val lamorLayeMcDo = _uiState.value.mcdonalds.first().first()
-            getMcDonalds(lamorLayeMcDo)
-        }
+        loadMcDonalds()
     }
 
     private suspend fun getMcDonalds(mcDo: McDonalds) {
@@ -105,6 +102,18 @@ class BigMacViewModel @Inject internal constructor(
         }
         viewModelScope.launch {
             getMcDonalds(mcDo)
+        }
+    }
+
+    fun loadMcDonalds() {
+        val currentMcDo = _uiState.value.mcdonalds.first().first()
+        _uiState.update {
+            it.copy(
+                mcDonaldsViewState = McDonaldsViewState.Loading
+            )
+        }
+        viewModelScope.launch {
+            getMcDonalds(currentMcDo)
         }
     }
 }
