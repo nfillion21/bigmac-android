@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -20,11 +21,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.SubcomposeAsyncImage
-import coil.request.ImageRequest
 import com.google.android.gms.maps.model.LatLng
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.direction
@@ -32,8 +31,10 @@ import xyz.poolp.core.domain.McDonalds
 
 @Composable
 fun McDonaldsCardTop(
+    state: BigMacUIState,
     mcDo: McDonalds,
     lamorlayeMcDo: McDonalds,
+    retryMcDonaldsPhoto: () -> Unit,
     step: Int
 ) {
     val typography = MaterialTheme.typography
@@ -58,10 +59,7 @@ fun McDonaldsCardTop(
 
                     mcDo.photo?.let {
                         SubcomposeAsyncImage(
-                            model = ImageRequest.Builder(LocalContext.current)
-                                .data(it.url)
-                                .crossfade(true)
-                                .build(),
+                            model = it.url,
                             loading = {
                                 LinearProgressIndicator(modifier = Modifier.fillMaxSize()
                                     .wrapContentSize(Alignment.Center))
@@ -70,9 +68,30 @@ fun McDonaldsCardTop(
                             contentScale = ContentScale.Crop,
                             modifier = imageModifier
                         )
-                    } ?: CircularProgressIndicator(modifier = Modifier.fillMaxSize()
-                        .wrapContentSize(Alignment.Center))
-        }
+                    } ?:
+
+                    when (state.mcDonaldsPhotoViewState) {
+
+                        is McDonaldsPhotoViewState.Failure -> {
+                            FilledTonalButton(
+                                onClick = retryMcDonaldsPhoto,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(16.dp)
+                                    .align(Alignment.Center)
+                            ) {
+                                Text(text = stringResource(id = R.string.an_error_occurred))
+                            }
+                        }
+
+                        is McDonaldsPhotoViewState.Loading -> {
+                            CircularProgressIndicator(modifier = Modifier.fillMaxSize()
+                                .wrapContentSize(Alignment.Center))
+                        }
+
+                        else -> {}
+                    }
+                }
 
         Spacer(Modifier.height(16.dp))
         Text(

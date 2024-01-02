@@ -37,6 +37,7 @@ class BigMacViewModel @Inject internal constructor(
                 it.copy(
                     mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds),
                     mcDonaldsViewState = McDonaldsViewState.Success,
+                    mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Loading,
                 )
             }
         } catch (e: Exception) {
@@ -47,23 +48,7 @@ class BigMacViewModel @Inject internal constructor(
             }
         }
 
-        val firstMcDo = _uiState.value.mcdonalds.last().first()
-        try {
-            firstMcDo.photo = getMcDonaldsPhotoUseCase.invoke(name = firstMcDo.photosNames.first().name)
-            val lastMcDonalds = _uiState.value.mcdonalds.last()
-            _uiState.update {
-                it.copy(
-                    mcdonalds = it.mcdonalds.dropLast(1) + (listOf(listOf(firstMcDo) + lastMcDonalds.drop(1))),
-                    mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Success
-                )
-            }
-        } catch (e: Exception) {
-            _uiState.update {
-                it.copy(
-                    mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Failure(e)
-                )
-            }
-        }
+        loadPhoto()
     }
 
     /**
@@ -97,7 +82,8 @@ class BigMacViewModel @Inject internal constructor(
         _uiState.update {
             it.copy(
                 mcdonalds = (it.mcdonalds + listOf(listOf(mcDo))),
-                mcDonaldsViewState = McDonaldsViewState.Loading
+                mcDonaldsViewState = McDonaldsViewState.Loading,
+                mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Loading
             )
         }
         viewModelScope.launch {
@@ -109,11 +95,32 @@ class BigMacViewModel @Inject internal constructor(
         val currentMcDo = _uiState.value.mcdonalds.first().first()
         _uiState.update {
             it.copy(
-                mcDonaldsViewState = McDonaldsViewState.Loading
+                mcDonaldsViewState = McDonaldsViewState.Loading,
+                mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Loading
             )
         }
         viewModelScope.launch {
             getMcDonalds(currentMcDo)
+        }
+    }
+
+    suspend fun loadPhoto() {
+        val firstMcDo = _uiState.value.mcdonalds.last().first()
+        try {
+            firstMcDo.photo = getMcDonaldsPhotoUseCase.invoke(name = firstMcDo.photosNames.first().name)
+            val lastMcDonalds = _uiState.value.mcdonalds.last()
+            _uiState.update {
+                it.copy(
+                    mcdonalds = it.mcdonalds.dropLast(1) + (listOf(listOf(firstMcDo) + lastMcDonalds.drop(1))),
+                    mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Success
+                )
+            }
+        } catch (e: Exception) {
+            _uiState.update {
+                it.copy(
+                    mcDonaldsPhotoViewState = McDonaldsPhotoViewState.Failure(e)
+                )
+            }
         }
     }
 }

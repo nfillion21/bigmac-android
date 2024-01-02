@@ -120,6 +120,9 @@ fun BigMacScreen(
                     retryMcDonalds = {
                         scope.launch { bigMacViewModel.loadMcDonalds() }
                     },
+                    retryMcDonaldsPhoto = {
+                        scope.launch { bigMacViewModel.loadPhoto() }
+                    },
                     modifier = Modifier
                         .nestedScroll(scrollBehavior.nestedScrollConnection)
                         .padding(innerPadding)
@@ -207,6 +210,7 @@ fun McDonaldsList(
     bigMacState: BigMacUIState,
     onMcDoItemPressed: (mcdo: McDonalds) -> Unit,
     retryMcDonalds: () -> Unit,
+    retryMcDonaldsPhoto: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
     state: LazyListState = rememberLazyListState(),
@@ -218,8 +222,10 @@ fun McDonaldsList(
     ) {
         item {
             McDonaldsListTopSection(
+                state = bigMacState,
                 mcdonalds = bigMacState.mcdonalds.last().first(),
                 lamorlayeMcDo = bigMacState.mcdonalds.first().first(),
+                retryMcDonaldsPhoto = retryMcDonaldsPhoto,
                 step = bigMacState.mcdonalds.size
             )
         }
@@ -261,8 +267,10 @@ fun McDonaldsList(
 
 @Composable
 private fun McDonaldsListTopSection(
+    state: BigMacUIState,
     mcdonalds: McDonalds,
     lamorlayeMcDo: McDonalds,
+    retryMcDonaldsPhoto: () -> Unit,
     step: Int
 ) {
     Text(
@@ -271,8 +279,10 @@ private fun McDonaldsListTopSection(
         style = MaterialTheme.typography.titleMedium
     )
     McDonaldsCardTop(
+        state = state,
         mcDo = mcdonalds,
         lamorlayeMcDo = lamorlayeMcDo,
+        retryMcDonaldsPhoto = retryMcDonaldsPhoto,
         step = step
     )
     PostListDivider()
