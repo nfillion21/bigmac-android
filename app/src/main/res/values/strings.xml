@@ -9,4 +9,5 @@
     <string name="distance_from_lamorlaye_km">Located %1$s km %2$s of Lamorlaye\'s McDonald\'s</string>
     <string name="mcdo_around_you_title">List of nearby McDonald\'s</string>
     <string name="based_in_locality">BASED IN %1$s</string>
+    <string name="an_error_occurred">An error occurred</string>
 </resources>

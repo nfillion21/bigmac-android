@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
@@ -26,6 +27,7 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -110,7 +112,7 @@ fun BigMacScreen(
                 label = "BigMacScreenDataAnimation"
             ) { targetState ->
                 McDonaldsList(
-                    mcdonalds = targetState.mcdonalds,
+                    bigMacState = targetState,
                     onMcDoItemPressed = {
                         scope.launch {
                             bigMacViewModel.onMcDoItemPressed(it)
@@ -200,7 +202,7 @@ private fun BigMacAppBar(
 
 @Composable
 fun McDonaldsList(
-    mcdonalds: List<List<McDonalds>>,
+    bigMacState: BigMacUIState,
     onMcDoItemPressed: (mcdo: McDonalds) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -213,24 +215,44 @@ fun McDonaldsList(
     ) {
         item {
             McDonaldsListTopSection(
-                mcdonalds = mcdonalds.last().first(),
-                lamorlayeMcDo = mcdonalds.first().first(),
-                step = mcdonalds.size
+                mcdonalds = bigMacState.mcdonalds.last().first(),
+                lamorlayeMcDo = bigMacState.mcdonalds.first().first(),
+                step = bigMacState.mcdonalds.size
             )
         }
+
         item {
-            if (mcdonalds.last().size > 1) {
-                McDonaldsNearbyListSection(
-                    mcdonalds = mcdonalds.last().drop(1),
-                    currentMcDo = mcdonalds.last().first(),
-                    step = mcdonalds.size,
-                    roadToMcDonalds = onMcDoItemPressed
-                )
-            } else {
-                LinearProgressIndicator(modifier = Modifier.fillMaxSize()
-                    .wrapContentSize(Alignment.Center)
-                    .padding(16.dp)
-                )
+            when (bigMacState.mcDonaldsViewState) {
+                is McDonaldsViewState.Success -> {
+                    if (bigMacState.mcdonalds.last().size > 1) {
+                        McDonaldsNearbyListSection(
+                            mcdonalds = bigMacState.mcdonalds.last().drop(1),
+                            currentMcDo = bigMacState.mcdonalds.last().first(),
+                            step = bigMacState.mcdonalds.size,
+                            roadToMcDonalds = onMcDoItemPressed
+                        )
+                    }
+                }
+
+                is McDonaldsViewState.Failure -> {
+                    Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
+                        FilledTonalButton(
+                            onClick = {},
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                        ) {
+                            Text(text = stringResource(id = R.string.an_error_occurred))
+                        }
+                    }
+                }
+
+                is McDonaldsViewState.Loading -> {
+                    LinearProgressIndicator(modifier = Modifier.fillMaxSize()
+                        .wrapContentSize(Alignment.Center)
+                        .padding(16.dp)
+                    )
+                }
             }
         }
     }
