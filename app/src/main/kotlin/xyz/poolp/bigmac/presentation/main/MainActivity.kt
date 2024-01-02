@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac
+package xyz.poolp.bigmac.presentation.main
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import dagger.hilt.android.AndroidEntryPoint
-import xyz.poolp.bigmac.navigation.BigMacNavHost
+import xyz.poolp.bigmac.presentation.main.navigation.BigMacNavHost
 import xyz.poolp.bigmac.ui.theme.BigMacTheme
 
 @AndroidEntryPoint

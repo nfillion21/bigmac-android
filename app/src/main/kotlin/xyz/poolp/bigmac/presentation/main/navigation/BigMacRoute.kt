@@ -1,9 +1,10 @@
-package xyz.poolp.bigmac.bigmac
+package xyz.poolp.bigmac.presentation.main.navigation
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import xyz.poolp.bigmac.viewmodels.BigMacViewModel
+import xyz.poolp.bigmac.presentation.main.screens.BigMacScreen
+import xyz.poolp.bigmac.presentation.main.screens.BigMacViewModel
 
 /**
  * Displays a [BigMacScreen] tied to the passed [BigMacViewModel]

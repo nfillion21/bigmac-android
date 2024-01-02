@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.viewmodels
+package xyz.poolp.bigmac.presentation.main.screens
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel

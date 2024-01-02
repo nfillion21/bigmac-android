@@ -17,7 +17,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
-import xyz.poolp.bigmac.app.framework.data.PlacesRepositoryImpl
+import xyz.poolp.bigmac.framework.data.PlacesRepositoryImpl
 import xyz.poolp.core.usecase.GetMcDonaldsPhotoUseCase
 import xyz.poolp.core.usecase.PostMcDonaldsUseCase
 import javax.inject.Singleton

@@ -1,7 +1,7 @@
-package xyz.poolp.bigmac.welcome
+package xyz.poolp.bigmac.presentation.main.navigation
 
 import androidx.compose.runtime.Composable
-import xyz.poolp.bigmac.screens.WelcomeScreen
+import xyz.poolp.bigmac.presentation.main.screens.WelcomeScreen
 
 @Composable
 fun WelcomeRoute(

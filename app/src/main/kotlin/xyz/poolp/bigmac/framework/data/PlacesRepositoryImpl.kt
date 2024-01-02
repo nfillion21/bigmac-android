@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.app.framework.data
+package xyz.poolp.bigmac.framework.data
 
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -6,12 +6,12 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPhotoRemote
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBody
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyCircle
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocation
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsPostBodyLocationBias
-import xyz.poolp.bigmac.app.framework.data.entity.McDonaldsRemote
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsPhotoRemote
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBody
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyCircle
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocation
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocationBias
+import xyz.poolp.bigmac.framework.data.entity.McDonaldsRemote
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonalds
 import xyz.poolp.core.domain.McDonaldsPhoto
@@ -87,7 +87,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                     parameters.append("key", Env.PLACES_API_KEY)
                     parameters.append("skipHttpRedirect", "true")
                     parameters.append("maxHeightPx", "256")
-                    //parameters.append("maxWidthtPx", 300)
+                    //parameters.append("maxWidthPx", 300)
                 }
             }.body()
 

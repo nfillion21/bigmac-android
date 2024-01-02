@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.bigmac
+package xyz.poolp.bigmac.presentation.main.screens
 
 import android.icu.text.DecimalFormat
 import android.location.Location

@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.bigmac
+package xyz.poolp.bigmac.presentation.main.screens
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -51,7 +51,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.launch
 import xyz.poolp.bigmac.R
 import xyz.poolp.bigmac.util.supportWideScreen
-import xyz.poolp.bigmac.viewmodels.BigMacViewModel
 import xyz.poolp.core.domain.McDonalds
 
 private const val CONTENT_ANIMATION_DURATION = 300

@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.screens
+package xyz.poolp.bigmac.presentation.main.screens
 
 import android.location.Location
 import androidx.compose.foundation.Image

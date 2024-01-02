@@ -1,4 +1,4 @@
-package xyz.poolp.bigmac.app.framework.data.entity
+package xyz.poolp.bigmac.framework.data.entity
 
 import kotlinx.serialization.Serializable
 
