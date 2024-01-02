@@ -86,8 +86,8 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                 url {
                     parameters.append("key", Env.PLACES_API_KEY)
                     parameters.append("skipHttpRedirect", "true")
-                    parameters.append("maxWidthPx", "1000")
-                    //parameters.append("maxHeightPx", 300)
+                    parameters.append("maxHeightPx", "256")
+                    //parameters.append("maxWidthtPx", 300)
                 }
             }.body()
 

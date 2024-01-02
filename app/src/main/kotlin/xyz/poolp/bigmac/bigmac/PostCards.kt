@@ -60,7 +60,7 @@ fun McDonaldsDistance(
 }
 
 @Composable
-fun McDonaldsImage(mcdonalds: McDonalds, modifier: Modifier = Modifier) {
+fun McDonaldsImage(modifier: Modifier = Modifier) {
     Image(
         painter = painterResource(R.drawable.mcdonalds_logo),
         contentDescription = null, // decorative
@@ -92,7 +92,6 @@ fun McDoCardNearby(
             .clickable(onClick = { roadToMcdo(mcdo) })
     ) {
         McDonaldsImage(
-            mcdonalds = mcdo,
             modifier = Modifier.padding(16.dp)
         )
         Column(

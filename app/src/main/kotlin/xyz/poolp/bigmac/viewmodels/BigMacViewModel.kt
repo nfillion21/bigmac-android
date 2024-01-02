@@ -26,52 +26,30 @@ class BigMacViewModel @Inject internal constructor(
     init {
         viewModelScope.launch {
             val lamorLayeMcDo = _uiState.value.mcdonalds.first().first()
-            val mcdonalds = postMcDonaldsUseCase.invoke(
-                latitude = lamorLayeMcDo.latitude,
-                longitude = lamorLayeMcDo.longitude
+            getMcDonalds(lamorLayeMcDo)
+        }
+    }
+
+    private suspend fun getMcDonalds(mcDo: McDonalds) {
+        val mcdonalds = postMcDonaldsUseCase.invoke(
+            latitude = mcDo.latitude,
+            longitude = mcDo.longitude
+        )
+        _uiState.update {
+            it.copy(
+                mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
             )
-            _uiState.update {
-                it.copy(
-                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
-                )
-            }
+        }
+
+        val firstMcDo = _uiState.value.mcdonalds.last().first()
+        firstMcDo.photo = getMcDonaldsPhotoUseCase.invoke(name = firstMcDo.photosNames.first().name)
+        val lastMcDonalds = _uiState.value.mcdonalds.last()
+        _uiState.update {
+            it.copy(
+                mcdonalds = it.mcdonalds.dropLast(1) + (listOf(listOf(firstMcDo) + lastMcDonalds.drop(1)))
+            )
         }
     }
-
-    //private var step = 0
-
-    /*
-    private val _bigMacScreenData = mutableStateOf(createBigMacScreenData())
-    val bigMacScreenData: BigMacUIState
-        get() = _bigMacScreenData.value
-    */
-
-    /*
-    init {
-        observeAssets()
-    }
-
-    private fun observeAssets() {
-        viewModelScope.launch {
-            assetsUseCase.invoke()
-                .catch { ex ->
-                    _uiState.value = MoaiHomeUIState(
-                        ethError = ex.message,
-                        tzError = ex.message
-                    )
-                }
-                .collect { assetList ->
-                    _uiState.update {
-                        it.copy(
-                            assets = assetList,
-                            step = 1
-                        )
-                    }
-                    launchAllAssets(fromPullToRefresh = false)
-                }
-        }
-    }
-    */
 
     /**
      * Returns true if the ViewModel handled the back press (i.e., it went back one page)
@@ -97,7 +75,6 @@ class BigMacViewModel @Inject internal constructor(
                 mcdonalds = it.mcdonalds.dropLast(1)
             )
         }
-        //moveStep(increase = false)
     }
 
     fun onMcDoItemPressed(mcDo: McDonalds) {
@@ -107,24 +84,7 @@ class BigMacViewModel @Inject internal constructor(
             )
         }
         viewModelScope.launch {
-            val mcdonalds = postMcDonaldsUseCase.invoke(
-                latitude = mcDo.latitude,
-                longitude = mcDo.longitude
-            )
-            _uiState.update {
-                it.copy(
-                    mcdonalds = it.mcdonalds.dropLast(1) + listOf(mcdonalds)
-                )
-            }
-
-            val firstMcDo = _uiState.value.mcdonalds.last().first()
-            firstMcDo.photo = getMcDonaldsPhotoUseCase.invoke(name = firstMcDo.photosNames.first().name)
-            val lastMcDonalds = _uiState.value.mcdonalds.last()
-            _uiState.update {
-                it.copy(
-                    mcdonalds = it.mcdonalds.dropLast(1) + (listOf(listOf(firstMcDo) + lastMcDonalds.drop(1)))
-                )
-            }
+            getMcDonalds(mcDo)
         }
     }
 
