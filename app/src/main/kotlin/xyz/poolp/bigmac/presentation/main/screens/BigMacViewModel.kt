@@ -24,7 +24,7 @@ class BigMacViewModel @Inject internal constructor(
     val uiState: StateFlow<BigMacUIState> = _uiState
 
     init {
-        loadMcDonalds()
+        loadMcDonalds(last = false)
     }
 
     private suspend fun getMcDonalds(mcDo: McDonalds) {
@@ -91,8 +91,11 @@ class BigMacViewModel @Inject internal constructor(
         }
     }
 
-    fun loadMcDonalds() {
-        val currentMcDo = _uiState.value.mcdonalds.first().first()
+    fun loadMcDonalds(last: Boolean) {
+        val currentMcDo =
+            if (last) _uiState.value.mcdonalds.last().first()
+            else _uiState.value.mcdonalds.first().first()
+
         _uiState.update {
             it.copy(
                 mcDonaldsViewState = McDonaldsViewState.Loading,

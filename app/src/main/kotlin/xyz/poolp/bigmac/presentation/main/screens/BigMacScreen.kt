@@ -118,7 +118,7 @@ fun BigMacScreen(
                         }
                     },
                     retryMcDonalds = {
-                        scope.launch { bigMacViewModel.loadMcDonalds() }
+                        scope.launch { bigMacViewModel.loadMcDonalds(last = true) }
                     },
                     retryMcDonaldsPhoto = {
                         scope.launch { bigMacViewModel.loadPhoto() }
