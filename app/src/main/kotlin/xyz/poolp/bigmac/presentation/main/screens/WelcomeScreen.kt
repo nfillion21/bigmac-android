@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -77,13 +78,15 @@ private fun Logo(
     lightTheme: Boolean = LocalContentColor.current.luminance() < 0.5f,
 ) {
     val assetId = if (lightTheme) {
-        R.drawable.mcdonalds_logo
+        R.drawable.ic_launcher_playstore
     } else {
-        R.drawable.mcdonalds_logo
+        R.drawable.ic_launcher_playstore
     }
     Image(
         painter = painterResource(id = assetId),
-        modifier = modifier.size(128.dp),
+        modifier = modifier
+            .size(128.dp)
+            .clip(MaterialTheme.shapes.extraLarge),
         contentDescription = null
     )
 }
