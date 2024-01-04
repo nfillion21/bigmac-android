@@ -54,6 +54,8 @@ class DataModule {
 
             install(DefaultRequest) {
                 header(HttpHeaders.ContentType, ContentType.Application.Json)
+                header("X-Android-Package", "xyz.poolp.bigmac")
+                header("X-Android-Cert", "82CD83E15062CDECE43054523FDBDA4C80224E75")
             }
         }
     }
