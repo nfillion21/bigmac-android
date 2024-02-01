@@ -157,16 +157,3 @@ sealed class McDonaldsPhotoViewState {
     data class Failure(val error: Throwable?) : McDonaldsPhotoViewState()
     object Loading : McDonaldsPhotoViewState()
 }
-
-/*
-data class MoaiHomeUIState(
-    val ethLoading: Boolean = false,
-    val tezLoading: Boolean = false,
-    val commodityLoading: Boolean = false,
-    val pullToRefreshLoading: Boolean = false,
-    val step: Int = 0,
-    val tzError: String? = null,
-    val ethError: String? = null,
-    val commodityError: String? = null
-)
-*/
