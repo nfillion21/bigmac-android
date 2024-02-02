@@ -14,6 +14,7 @@ object Dependencies {
     val mapUtils by lazy {"com.google.maps.android:android-maps-utils:${Versions.mapUtils}"}
 
     val junit by lazy {"junit:junit:${Versions.junit}"}
+    val truth by lazy {"com.google.truth:truth:${Versions.truth}"}
     val androidTestJUnit by lazy {"androidx.test.ext:junit:${Versions.androidTestJUnit}"}
     val androidTestEspresso by lazy {"androidx.test.espresso:espresso-core:${Versions.androidTestEspresso}"}
     val androidTestComposeBom by lazy {"androidx.compose:compose-bom:${Versions.androidTestComposeBom}"}
