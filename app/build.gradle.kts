@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":core"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.truth)
+    testImplementation (Dependencies.mockito)
     androidTestImplementation(Dependencies.androidTestJUnit)
     androidTestImplementation(Dependencies.androidTestEspresso)
     androidTestImplementation(platform(Dependencies.androidTestComposeBom))
