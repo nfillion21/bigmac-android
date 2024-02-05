@@ -81,15 +81,18 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
     }
 
     override suspend fun getMcDonaldsPhoto(name: String): McDonaldsPhoto {
+
+        val request = ktorHttpClient.get("https://places.googleapis.com/v1/$name/media") {
+            url {
+                parameters.append("key", Env.PLACES_API_KEY)
+                parameters.append("skipHttpRedirect", "true")
+                parameters.append("maxHeightPx", "256")
+                //parameters.append("maxWidthPx", 300)
+            }
+        }
+
         val mcDonaldsPhotoRemote: McDonaldsPhotoRemote =
-            ktorHttpClient.get("https://places.googleapis.com/v1/$name/media") {
-                url {
-                    parameters.append("key", Env.PLACES_API_KEY)
-                    parameters.append("skipHttpRedirect", "true")
-                    parameters.append("maxHeightPx", "256")
-                    //parameters.append("maxWidthPx", 300)
-                }
-            }.body()
+            request.body()
 
         return McDonaldsPhoto(
             url = mcDonaldsPhotoRemote.photoUri

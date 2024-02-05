@@ -35,6 +35,7 @@ object Dependencies {
     val ktorSerializationJSON by lazy { "io.ktor:ktor-serialization-kotlinx-json:${Versions.ktor}" }
     val ktorContentNegotiation by lazy { "io.ktor:ktor-client-content-negotiation:${Versions.ktor}" }
     val ktorClientLogging by lazy { "io.ktor:ktor-client-logging:${Versions.ktor}" }
+    val ktorClientMock by lazy { "io.ktor:ktor-client-mock:${Versions.ktor}" }
 
     // Coil
     val coil by lazy {"io.coil-kt:coil-compose:${Versions.coil}"}

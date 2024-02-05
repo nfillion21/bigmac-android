@@ -91,6 +91,7 @@ dependencies {
     implementation(Dependencies.ktorSerializationJSON)
     implementation(Dependencies.ktorContentNegotiation)
     implementation(Dependencies.ktorClientLogging)
+    testImplementation(Dependencies.ktorClientMock)
 
     implementation(Dependencies.coil)
 }
