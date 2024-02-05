@@ -12,6 +12,7 @@ import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyCircle
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsRemote
+import xyz.poolp.bigmac.framework.data.entity.mapToMcDonaldsPhoto
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonalds
 import xyz.poolp.core.domain.McDonaldsPhoto
@@ -94,8 +95,6 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
         val mcDonaldsPhotoRemote: McDonaldsPhotoRemote =
             request.body()
 
-        return McDonaldsPhoto(
-            url = mcDonaldsPhotoRemote.photoUri
-        )
+        return mcDonaldsPhotoRemote.mapToMcDonaldsPhoto()
     }
 }

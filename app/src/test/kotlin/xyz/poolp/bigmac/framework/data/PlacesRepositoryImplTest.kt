@@ -30,22 +30,12 @@ import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyCircle
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsRemote
+import xyz.poolp.bigmac.framework.data.entity.mapToMcDonaldsPhoto
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonaldsPhoto
 import xyz.poolp.core.usecase.GetMcDonaldsPhotoUseCase
 
 class PlacesRepositoryImplTest {
-
-    private lateinit var placesRepository: PlacesRepository
-
-    @Mock
-    lateinit var ktorHttpClient: HttpClient
-
-    @Before
-    fun setUp() {
-        MockitoAnnotations.openMocks(this)
-        placesRepository = PlacesRepositoryImpl(ktorHttpClient)
-    }
 
     class ApiClient(engine: HttpClientEngine) {
         private val httpClient = HttpClient(engine) {
@@ -57,9 +47,8 @@ class PlacesRepositoryImplTest {
         suspend fun getMcDonaldsPhoto(): McDonaldsPhotoRemote = httpClient.get("url").body()
     }
     @Test
-    fun `Get McDonald's photo, correct photo return`(): Unit = runBlocking {
-
-        val mockEngine = MockEngine {request ->
+    fun `Get McDonald's remote photo, correct photo return`(): Unit = runBlocking {
+        val mockEngine = MockEngine { _ ->
             respond(
                 content = ByteReadChannel("""{"name": "mcdonalds photo name",
                                                    "photoUri": "mcdonalds photo uri"}"""),
@@ -68,86 +57,12 @@ class PlacesRepositoryImplTest {
             )
         }
         val apiClient = ApiClient(mockEngine)
-        val mcDonaldsPhotoRemote = apiClient.getMcDonaldsPhoto()
-        val str2 = mcDonaldsPhotoRemote.name
-        val str2url = mcDonaldsPhotoRemote.photoUri
+        val mcDonaldsPhoto = apiClient.getMcDonaldsPhoto().mapToMcDonaldsPhoto()
 
-        //Assert.assertEquals("127.0.0.1", apiClient.getIp().ip)
-
-        /*
-        Mockito.`when`(
-            ktorHttpClient.post("https://places.googleapis.com/v1/places:searchText") {
-                setBody(
-                    McDonaldsPostBody(
-                        textQuery = "McDonald's",
-                        maxResultCount = 20,
-                        locationBias = McDonaldsPostBodyLocationBias(
-                            circle = McDonaldsPostBodyCircle(
-                                center = McDonaldsPostBodyLocation(
-                                    latitude = 1.0,
-                                    longitude = 1.0
-                                ),
-                                radius = 500.0
-                            ),
-                        )
-                    )
-                )
-                headers {
-                    append("X-Goog-Api-Key", Env.PLACES_API_KEY)
-                    append(
-                        "X-Goog-FieldMask",
-                        "places.id,places.formattedAddress,places.location,places.shortFormattedAddress,places.addressComponents,places.photos"
-                    )
-                }
-            }.body<McDonaldsRemote>()
-        ).thenReturn(
-            McDonaldsRemote(
-                places = emptyList()
-            )
-        )
-        */
-        //Truth.assertThat(photo.url == "http://www.poolp.xyz/photo.png").isTrue()
+        Truth.assertThat(mcDonaldsPhoto.url == "mcdonalds photo uri").isTrue()
     }
 
     @Test
     fun postMcDonalds() {
-    }
-
-    @Test
-    fun `getMcDonaldsPhoto`(): Unit = runBlocking {
-
-        /*
-        val mcDonaldsPhotoRemote: McDonaldsPhotoRemote =
-            ktorHttpClient.get("https://places.googleapis.com/v1/$name/media") {
-                url {
-                    parameters.append("key", Env.PLACES_API_KEY)
-                    parameters.append("skipHttpRedirect", "true")
-                    parameters.append("maxHeightPx", "256")
-                    //parameters.append("maxWidthPx", 300)
-                }
-            }
-
-        return McDonaldsPhoto(
-            url = mcDonaldsPhotoRemote.photoUri
-        )
-        */
-        Mockito.`when`(
-            ktorHttpClient.get("https://places.googleapis.com/v1/lamorlaye/media") {
-                url {
-                    parameters.append("key", Env.PLACES_API_KEY)
-                    parameters.append("skipHttpRedirect", "true")
-                    parameters.append("maxHeightPx", "256")
-                    //parameters.append("maxWidthPx", 300)
-                }
-            }.body<McDonaldsPhotoRemote>()
-        ).thenReturn(
-            McDonaldsPhotoRemote(
-                name = "lamorlaye",
-                photoUri = "lamorlaye photo uri"
-            )
-        )
-
-        val photo = placesRepository.getMcDonaldsPhoto("lamorlaye")
-        Truth.assertThat(photo.url == "lamorlaye photo uri").isTrue()
     }
 }
