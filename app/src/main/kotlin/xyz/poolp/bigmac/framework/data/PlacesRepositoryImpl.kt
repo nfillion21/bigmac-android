@@ -12,6 +12,7 @@ import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyCircle
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsRemote
+import xyz.poolp.bigmac.framework.data.entity.mapToMcDonalds
 import xyz.poolp.bigmac.framework.data.entity.mapToMcDonaldsPhoto
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonalds
@@ -48,37 +49,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                 }
             }
         val mcDonaldsRemote: McDonaldsRemote = request.body()
-
-        return mcDonaldsRemote.places.map { mcDonalds ->
-            with(mcDonalds) {
-
-                var city = ""
-                loop@ for (component in addressComponents) {
-                    for (type in component.types) {
-                        if (type == "locality") {
-                            city = component.longText
-                            break@loop
-                        }
-                    }
-                }
-
-                val photos = photos.map {
-                    McDonaldsPhotoName(
-                        name = it.name,
-                    )
-                }
-
-                McDonalds(
-                    identifier = id,
-                    formattedAddress = formattedAddress,
-                    shortFormattedAddress = shortFormattedAddress,
-                    latitude = location.latitude,
-                    longitude = location.longitude,
-                    locality = city,
-                    photosNames = photos
-                )
-            }
-        }
+        return mcDonaldsRemote.mapToMcDonalds()
     }
 
     override suspend fun getMcDonaldsPhoto(name: String): McDonaldsPhoto {

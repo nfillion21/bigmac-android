@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":core"))
     testImplementation(Dependencies.junit)
     testImplementation(Dependencies.truth)
+    androidTestImplementation(Dependencies.truth)
     testImplementation (Dependencies.mockito)
     implementation (Dependencies.coreTest)
     androidTestImplementation(Dependencies.androidTestJUnit)
@@ -93,6 +94,7 @@ dependencies {
     implementation(Dependencies.ktorContentNegotiation)
     implementation(Dependencies.ktorClientLogging)
     testImplementation(Dependencies.ktorClientMock)
+    androidTestImplementation(Dependencies.ktorClientMock)
 
     implementation(Dependencies.coil)
 }
