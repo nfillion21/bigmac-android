@@ -16,6 +16,7 @@ object Dependencies {
     val junit by lazy {"junit:junit:${Versions.junit}"}
     val truth by lazy {"com.google.truth:truth:${Versions.truth}"}
     val mockito by lazy {"org.mockito:mockito-core:${Versions.mockito}"}
+    val coreTest by lazy {"androidx.test:core-ktx:${Versions.coreTest}"}
     val androidTestJUnit by lazy {"androidx.test.ext:junit:${Versions.androidTestJUnit}"}
     val androidTestEspresso by lazy {"androidx.test.espresso:espresso-core:${Versions.androidTestEspresso}"}
     val androidTestComposeBom by lazy {"androidx.compose:compose-bom:${Versions.androidTestComposeBom}"}

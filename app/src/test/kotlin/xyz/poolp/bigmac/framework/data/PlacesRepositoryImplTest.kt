@@ -1,5 +1,7 @@
 package xyz.poolp.bigmac.framework.data
 
+import android.content.Context
+import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
@@ -31,11 +33,19 @@ import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocation
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsPostBodyLocationBias
 import xyz.poolp.bigmac.framework.data.entity.McDonaldsRemote
 import xyz.poolp.bigmac.framework.data.entity.mapToMcDonaldsPhoto
+import xyz.poolp.bigmac.util.loadJSONFromAssets
 import xyz.poolp.core.data.PlacesRepository
 import xyz.poolp.core.domain.McDonaldsPhoto
 import xyz.poolp.core.usecase.GetMcDonaldsPhotoUseCase
 
 class PlacesRepositoryImplTest {
+
+    private lateinit var context: Context
+    @Before
+    fun setUp() {
+        //MockitoAnnotations.openMocks(this)
+        //context = ApplicationProvider.getApplicationContext<Context>()
+    }
 
     class ApiClient(engine: HttpClientEngine) {
         private val httpClient = HttpClient(engine) {
@@ -45,6 +55,7 @@ class PlacesRepositoryImplTest {
         }
 
         suspend fun getMcDonaldsPhoto(): McDonaldsPhotoRemote = httpClient.get("url").body()
+        suspend fun postMcDonalds(): McDonaldsRemote = httpClient.post("url").body()
     }
     @Test
     fun `Get McDonald's remote photo, correct photo return`(): Unit = runBlocking {
@@ -63,6 +74,20 @@ class PlacesRepositoryImplTest {
     }
 
     @Test
-    fun postMcDonalds() {
+    fun `Post McDonald's, correct photo return`(): Unit = runBlocking {
+        val mockEngine = MockEngine { _ ->
+
+            val context = ApplicationProvider.getApplicationContext<Context>()
+            val data = context.loadJSONFromAssets("post_mcdonalds.json")
+
+            respond(
+                content = ByteReadChannel("""{"name": "mcdonalds photo name",
+                                                   "photoUri": "mcdonalds photo uri"}"""),
+                status = HttpStatusCode.OK,
+                headers = headersOf(HttpHeaders.ContentType, "application/json")
+            )
+        }
+        val apiClient = ApiClient(mockEngine)
+        val mcDonaldsPhoto = apiClient.postMcDonalds()
     }
 }

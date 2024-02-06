@@ -23,8 +23,7 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
     PlacesRepository {
     override suspend fun postMcDonalds(latitude: Double, longitude: Double): List<McDonalds> {
 
-        val mcDonaldsRemote: McDonaldsRemote =
-            ktorHttpClient.post("https://places.googleapis.com/v1/places:searchText") {
+            val request = ktorHttpClient.post("https://places.googleapis.com/v1/places:searchText") {
                 setBody(
                     McDonaldsPostBody(
                         textQuery = "McDonald's",
@@ -47,7 +46,8 @@ class PlacesRepositoryImpl @Inject constructor(private val ktorHttpClient: HttpC
                         "places.id,places.formattedAddress,places.location,places.shortFormattedAddress,places.addressComponents,places.photos"
                     )
                 }
-            }.body()
+            }
+        val mcDonaldsRemote: McDonaldsRemote = request.body()
 
         return mcDonaldsRemote.places.map { mcDonalds ->
             with(mcDonalds) {

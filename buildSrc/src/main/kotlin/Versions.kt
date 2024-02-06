@@ -13,6 +13,7 @@ object Versions {
     const val junit = "4.13.2"
     const val truth = "1.3.0"
     const val mockito = "5.10.0"
+    const val coreTest = "1.5.0"
     const val androidTestJUnit = "1.1.5"
     const val androidTestEspresso = "3.5.1"
     const val androidTestComposeBom = "2023.03.00"
